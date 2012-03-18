@@ -16,15 +16,14 @@ package com.sixdimensions.wcm.cq.pack;
  * limitations under the License.
  */
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
-
-import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+
+import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
 /**
  * Goal which touches a timestamp file.
