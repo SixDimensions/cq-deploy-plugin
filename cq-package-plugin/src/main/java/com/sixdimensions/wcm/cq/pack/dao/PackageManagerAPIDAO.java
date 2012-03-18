@@ -144,6 +144,8 @@ public class PackageManagerAPIDAO {
 				HttpEntity resEntity = response.getEntity();
 				return EntityUtils.toByteArray(resEntity);
 			} else {
+				HttpEntity resEntity = response.getEntity();
+				log.debug(EntityUtils.toString(resEntity));
 				throw new IOException("Invalid response: "
 						+ response.getStatusLine().getStatusCode() + " "
 						+ response.getStatusLine().getReasonPhrase());
