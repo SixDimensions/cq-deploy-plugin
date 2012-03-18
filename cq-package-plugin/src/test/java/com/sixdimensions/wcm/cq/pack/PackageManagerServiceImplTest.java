@@ -21,7 +21,7 @@ public class PackageManagerServiceImplTest {
 		PackageManagerConfig config = new PackageManagerConfig();
 		config.setHost("http://poc.crownpartners.com");
 		config.setPort("4502");
-		config.setUseLegacy(true);
+		config.setUseLegacy(false);
 		config.setUser("admin");
 		config.setPassword("bob");
 		config.setErrorOnFailure(false);
