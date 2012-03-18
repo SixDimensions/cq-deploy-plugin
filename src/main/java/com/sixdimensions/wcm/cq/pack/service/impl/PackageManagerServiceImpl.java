@@ -57,8 +57,8 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 
 	public void delete(String path) throws Exception {
 		log.debug("delete");
-		JSONObject result = pmAPI.doPost(assembleUrl(path) + DELETE_COMMAND,
-				null);
+		JSONObject result = new JSONObject(pmAPI.doPost(assembleUrl(path)
+				+ DELETE_COMMAND, null));
 
 		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
 		log.debug("Message: " + result.getString(MESSAGE_KEY));
@@ -91,8 +91,8 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 
 	public void preview(String path) throws Exception {
 		log.debug("preview");
-		JSONObject result = pmAPI.doPost(assembleUrl(path) + PREVIEW_COMMAND,
-				null);
+		JSONObject result = new JSONObject(pmAPI.doPost(assembleUrl(path)
+				+ PREVIEW_COMMAND, null));
 
 		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
 		log.debug("Message: " + result.getString(MESSAGE_KEY));
