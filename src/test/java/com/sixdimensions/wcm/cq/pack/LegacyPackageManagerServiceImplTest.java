@@ -48,6 +48,28 @@ public class LegacyPackageManagerServiceImplTest {
 	}
 
 	@Test
+	public void testUpload() throws Exception {
+		log.info("Testing Upload");
+		File f = new File(URLDecoder.decode(getClass().getClassLoader()
+				.getResource("test-1.0.0.zip").getPath(), "UTF-8"));
+		packageManagerSvc.upload("test/test", f);
+	}
+	
+
+	@Test
+	public void testInstall() throws Exception {
+		log.info("Testing Install");
+		try {
+			packageManagerSvc.install("my_packages/does-not-exist.zip");
+			fail("Exception expected");
+		} catch (Exception re) {
+			log.info("Exception caught as expected");
+		}
+		packageManagerSvc.install("test/test");
+	}
+	
+	
+	@Test
 	public void testDelete() throws Exception {
 		log.info("Testing Delete");
 		try {
@@ -59,11 +81,4 @@ public class LegacyPackageManagerServiceImplTest {
 
 	}
 
-	@Test
-	public void testUpload() throws Exception {
-		log.info("Testing Upload");
-		File f = new File(URLDecoder.decode(getClass().getClassLoader()
-				.getResource("test-1.0.0.zip").getPath(), "UTF-8"));
-		packageManagerSvc.upload("test/test-1.0.0.zip", f);
-	}
 }
