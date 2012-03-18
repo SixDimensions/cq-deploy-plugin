@@ -27,7 +27,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
 import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
@@ -94,7 +93,6 @@ public class PackageManagerAPIDAO {
 			}
 
 			log.debug("executing request " + httppost.getRequestLine());
-			Credentials bob = httpclient.getCredentialsProvider().getCredentials(AuthScope.ANY);
 			HttpResponse response = httpclient.execute(httppost);
 
 			log.debug("Recieving response");
