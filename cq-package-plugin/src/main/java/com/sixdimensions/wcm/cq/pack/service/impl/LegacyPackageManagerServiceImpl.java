@@ -24,7 +24,7 @@ import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 
 	private static enum COMMAND {
-		DELETE("m"), INSTALL("ins");
+		DELETE("rm"), INSTALL("ins"), UPLOAD("upload");
 
 		private final String cmd;
 
@@ -36,6 +36,7 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 			return cmd;
 		}
 	}
+
 	private static final String COMMAND_KEY = "?cmd=";
 	private static final String GROUP_KEY = "&group=";
 	private static final String NAME_KEY = "&name=";
@@ -65,8 +66,8 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		url += COMMAND_KEY + command.getCmd();
 
 		if (path.contains("/")) {
-			String name = path.substring(path.indexOf("/"));
-			String group = path.substring(0, path.indexOf("/") - 1);
+			String name = path.substring(path.indexOf("/") + 1);
+			String group = path.substring(0, path.indexOf("/"));
 			url += NAME_KEY + name + GROUP_KEY + group;
 		} else {
 			url += NAME_KEY + path;
@@ -218,8 +219,26 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * .lang.String, java.io.File)
 	 */
 	public void upload(String path, File pkg) throws Exception {
-		// TODO Auto-generated method stub
+		log.debug("install");
 
+		byte[] result = pmAPI.postFile(
+				"http://poc.crownpartners.com:4502/crx/packmgr/service.jsp",
+				pkg);
+
+		log.debug("Result of command: " + new String(result, "UTF-8"));
+
+		try {
+			Response response = parseResponse(result);
+			if (!response.isSucceeded() && config.isErrorOnFailure()) {
+				throw new Exception("Failed to upload package, code: "
+						+ response.getCode() + " message: "
+						+ response.getMessage());
+			}
+		} catch (Exception e) {
+			throw new Exception(
+					"Exception parsing response, unable to determine command success or failure",
+					e);
+		}
 	}
 
 	/*
