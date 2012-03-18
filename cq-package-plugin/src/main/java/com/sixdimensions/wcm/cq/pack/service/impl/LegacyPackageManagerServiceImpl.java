@@ -23,15 +23,27 @@ import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
 public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 
-	private Log log;
-	private PackageManagerConfig config;
-	private PackageManagerAPIDAO pmAPI;
-	private static final String SERVICE_PATH = "/crx/packmgr/service.jsp";
-	private static final String DELETE_COMMAND = "rm";
-	private static final String INSTALL_COMMAND = "ins";
+	private static enum COMMAND {
+		DELETE("m"), INSTALL("ins");
+
+		private final String cmd;
+
+		COMMAND(String cmd) {
+			this.cmd = cmd;
+		}
+
+		public String getCmd() {
+			return cmd;
+		}
+	}
 	private static final String COMMAND_KEY = "?cmd=";
+	private static final String GROUP_KEY = "&group=";
 	private static final String NAME_KEY = "&name=";
+	private static final String SERVICE_PATH = "/crx/packmgr/service.jsp";
 	private static final String SUCCESS_KEY = "200";
+	private PackageManagerConfig config;
+	private Log log;
+	private PackageManagerAPIDAO pmAPI;
 
 	public LegacyPackageManagerServiceImpl(PackageManagerConfig config) {
 		log = config.getLog();
@@ -39,23 +51,40 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		pmAPI = new PackageManagerAPIDAO(config);
 	}
 
-	private String assembleUrl(String path, String command) {
+	/**
+	 * Assembles a URL based on the current configuration, the path and the
+	 * command to execute.
+	 * 
+	 * @param path
+	 * @param command
+	 * @return
+	 */
+	private String assembleUrl(String path, COMMAND command) {
 		log.debug("assembleUrl");
 		String url = config.getHost() + ":" + config.getPort() + SERVICE_PATH;
-		url += COMMAND_KEY + command;
+		url += COMMAND_KEY + command.getCmd();
 
 		if (path.contains("/")) {
-			// TODO: Parse out the name and path
+			String name = path.substring(path.indexOf("/"));
+			String group = path.substring(0, path.indexOf("/") - 1);
+			url += NAME_KEY + name + GROUP_KEY + group;
 		} else {
 			url += NAME_KEY + path;
 		}
 		return url;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#delete(java
+	 * .lang.String)
+	 */
 	public void delete(String path) throws Exception {
 		log.debug("delete");
 
-		byte[] result = pmAPI.doGet(assembleUrl(path, DELETE_COMMAND));
+		byte[] result = pmAPI.doGet(assembleUrl(path, COMMAND.DELETE));
 
 		log.debug("Result of command: " + new String(result, "UTF-8"));
 
@@ -73,15 +102,56 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#dryRun(java
+	 * .lang.String)
+	 */
 	public void dryRun(String path) throws Exception {
 		throw new Exception("Dry Run is not supported in Legacy API");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#install(java
+	 * .lang.String)
+	 */
 	public void install(String path) throws Exception {
-		// TODO Auto-generated method stub
+		log.debug("install");
 
+		byte[] result = pmAPI.doGet(assembleUrl(path, COMMAND.INSTALL));
+
+		log.debug("Result of command: " + new String(result, "UTF-8"));
+
+		try {
+			Response response = parseResponse(result);
+			if (!response.isSucceeded() && config.isErrorOnFailure()) {
+				throw new Exception("Failed to install package, code: "
+						+ response.getCode() + " message: "
+						+ response.getMessage());
+			}
+		} catch (Exception e) {
+			throw new Exception(
+					"Exception parsing response, unable to determine command success or failure",
+					e);
+		}
 	}
 
+	/**
+	 * Parses the response from the server using XPath.
+	 * 
+	 * @param response
+	 *            the response to parse
+	 * @return a response object representing the response data
+	 * @throws XPathExpressionException
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 */
 	private Response parseResponse(byte[] response)
 			throws XPathExpressionException, SAXException, IOException,
 			ParserConfigurationException {
@@ -129,26 +199,64 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		return responseObj;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#preview(java
+	 * .lang.String)
+	 */
 	public void preview(String path) throws Exception {
-		throw new Exception("Preview is not supported in Legacy API");
+		throw new RuntimeException("Preview is not supported in Legacy API");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#upload(java
+	 * .lang.String, java.io.File)
+	 */
 	public void upload(String path, File pkg) throws Exception {
 		// TODO Auto-generated method stub
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#validatePath
+	 * (java.lang.String)
+	 */
 	public boolean validatePath(String path) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 }
 
+/**
+ * Represents a response from the Legacy API.
+ * 
+ * @author klcodanr
+ */
 class Response {
-	boolean succeeded;
 	private String code;
 	private String message;
+	boolean succeeded;
 
+	/**
+	 * Construct a new Response
+	 * 
+	 * @param succeeded
+	 *            whether or not the request succeeded aka the response code
+	 *            equals 200
+	 * @param code
+	 *            the response code returned by the server
+	 * @param message
+	 *            the message returned by the server usually either 'ok' or some
+	 *            sort of error
+	 */
 	protected Response(boolean succeeded, String code, String message) {
 		this.succeeded = succeeded;
 		this.code = code;
