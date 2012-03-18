@@ -53,7 +53,6 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 			return config.getHost() + ":" + config.getPort() + PACK_MGR_PATH
 					+ PACKAGE_BASE_PATH + path;
 		}
-
 	}
 
 	public void delete(String path) throws Exception {
