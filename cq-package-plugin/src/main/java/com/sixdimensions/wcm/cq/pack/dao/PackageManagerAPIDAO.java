@@ -29,6 +29,7 @@ import org.apache.http.ParseException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -62,6 +63,58 @@ public class PackageManagerAPIDAO {
 	}
 
 	/**
+	 * Performs a HTTP Get to the specified url with the specified parameters.
+	 * Uses the username and password set in the config.
+	 * 
+	 * @param url
+	 *            the url to get from
+	 * @param param
+	 *            the parameters to pass to the request
+	 * @return the JSON response from the server
+	 * @throws ParseException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public JSONObject doGet(String url, Map<String, String> params)
+			throws ParseException, IOException, JSONException {
+		log.debug("doGet");
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		try {
+			HttpGet httpget = new HttpGet(url);
+
+			httpclient.getCredentialsProvider().setCredentials(
+					AuthScope.ANY,
+					new UsernamePasswordCredentials(config.getUser(), config
+							.getPassword()));
+
+			if (params != null) {
+				for (String key : params.keySet()) {
+					httpget.getParams().setParameter(key, params.get(key));
+				}
+			}
+
+			log.debug("executing request " + httpget.getRequestLine());
+			HttpResponse response = httpclient.execute(httpget);
+
+			log.debug("Recieving response");
+			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
+				HttpEntity resEntity = response.getEntity();
+				String responseStr = EntityUtils.toString(resEntity, "UTF-8");
+				return new JSONObject(responseStr);
+			} else {
+				throw new IOException("Invalid response: "
+						+ response.getStatusLine().getStatusCode() + " "
+						+ response.getStatusLine().getReasonPhrase());
+			}
+		} finally {
+			try {
+				httpclient.getConnectionManager().shutdown();
+			} catch (Exception ignore) {
+			}
+		}
+	}
+
+	/**
 	 * Performs a HTTP Post to the specified url with the specified parameters.
 	 * Uses the username and password set in the config.
 	 * 
@@ -74,8 +127,8 @@ public class PackageManagerAPIDAO {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public JSONObject doPost(String url, Map<String,String> params) throws ParseException, IOException,
-			JSONException {
+	public JSONObject doPost(String url, Map<String, String> params)
+			throws ParseException, IOException, JSONException {
 		log.debug("doPost");
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
@@ -85,9 +138,9 @@ public class PackageManagerAPIDAO {
 					AuthScope.ANY,
 					new UsernamePasswordCredentials(config.getUser(), config
 							.getPassword()));
-			
-			if(params != null){
-				for(String key : params.keySet()){
+
+			if (params != null) {
+				for (String key : params.keySet()) {
 					httppost.getParams().setParameter(key, params.get(key));
 				}
 			}
