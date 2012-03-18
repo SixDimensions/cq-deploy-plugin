@@ -24,7 +24,7 @@ import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 
 	private static enum COMMAND {
-		DELETE("rm"), INSTALL("ins"), UPLOAD("upload");
+		DELETE("rm"), INSTALL("inst"), UPLOAD("upload");
 
 		private final String cmd;
 
@@ -89,17 +89,10 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 
 		log.debug("Result of command: " + new String(result, "UTF-8"));
 
-		try {
-			Response response = parseResponse(result);
-			if (!response.isSucceeded() && config.isErrorOnFailure()) {
-				throw new Exception("Failed to delete package, code: "
-						+ response.getCode() + " message: "
-						+ response.getMessage());
-			}
-		} catch (Exception e) {
-			throw new Exception(
-					"Exception parsing response, unable to determine command success or failure",
-					e);
+		Response response = parseResponse(result);
+		if (!response.isSucceeded() && config.isErrorOnFailure()) {
+			throw new Exception("Failed to delete package, code: "
+					+ response.getCode() + " message: " + response.getMessage());
 		}
 	}
 
@@ -127,18 +120,11 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		byte[] result = pmAPI.doGet(assembleUrl(path, COMMAND.INSTALL));
 
 		log.debug("Result of command: " + new String(result, "UTF-8"));
+		Response response = parseResponse(result);
 
-		try {
-			Response response = parseResponse(result);
-			if (!response.isSucceeded() && config.isErrorOnFailure()) {
-				throw new Exception("Failed to install package, code: "
-						+ response.getCode() + " message: "
-						+ response.getMessage());
-			}
-		} catch (Exception e) {
-			throw new Exception(
-					"Exception parsing response, unable to determine command success or failure",
-					e);
+		if (!response.isSucceeded() && config.isErrorOnFailure()) {
+			throw new Exception("Failed to install package, code: "
+					+ response.getCode() + " message: " + response.getMessage());
 		}
 	}
 
@@ -221,23 +207,14 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	public void upload(String path, File pkg) throws Exception {
 		log.debug("install");
 
-		byte[] result = pmAPI.postFile(
-				"http://poc.crownpartners.com:4502/crx/packmgr/service.jsp",
-				pkg);
+		byte[] result = pmAPI.postFile(assembleUrl(path, COMMAND.UPLOAD), pkg);
 
 		log.debug("Result of command: " + new String(result, "UTF-8"));
 
-		try {
-			Response response = parseResponse(result);
-			if (!response.isSucceeded() && config.isErrorOnFailure()) {
-				throw new Exception("Failed to upload package, code: "
-						+ response.getCode() + " message: "
-						+ response.getMessage());
-			}
-		} catch (Exception e) {
-			throw new Exception(
-					"Exception parsing response, unable to determine command success or failure",
-					e);
+		Response response = parseResponse(result);
+		if (!response.isSucceeded() && config.isErrorOnFailure()) {
+			throw new Exception("Failed to upload package, code: "
+					+ response.getCode() + " message: " + response.getMessage());
 		}
 	}
 
