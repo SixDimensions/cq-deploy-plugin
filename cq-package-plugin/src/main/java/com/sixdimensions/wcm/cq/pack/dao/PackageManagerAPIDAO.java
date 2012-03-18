@@ -36,8 +36,6 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.maven.plugin.logging.Log;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 
@@ -70,13 +68,12 @@ public class PackageManagerAPIDAO {
 	 *            the url to get from
 	 * @param param
 	 *            the parameters to pass to the request
-	 * @return the JSON response from the server
+	 * @return the response from the server
 	 * @throws ParseException
 	 * @throws IOException
-	 * @throws JSONException
 	 */
-	public JSONObject doGet(String url, Map<String, String> params)
-			throws ParseException, IOException, JSONException {
+	public byte[] doGet(String url)
+			throws ParseException, IOException {
 		log.debug("doGet");
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
@@ -87,20 +84,14 @@ public class PackageManagerAPIDAO {
 					new UsernamePasswordCredentials(config.getUser(), config
 							.getPassword()));
 
-			if (params != null) {
-				for (String key : params.keySet()) {
-					httpget.getParams().setParameter(key, params.get(key));
-				}
-			}
-
 			log.debug("executing request " + httpget.getRequestLine());
 			HttpResponse response = httpclient.execute(httpget);
 
 			log.debug("Recieving response");
 			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
 				HttpEntity resEntity = response.getEntity();
-				String responseStr = EntityUtils.toString(resEntity, "UTF-8");
-				return new JSONObject(responseStr);
+
+				return EntityUtils.toByteArray(resEntity);
 			} else {
 				throw new IOException("Invalid response: "
 						+ response.getStatusLine().getStatusCode() + " "
@@ -122,13 +113,12 @@ public class PackageManagerAPIDAO {
 	 *            the url to post to
 	 * @param param
 	 *            the parameters to pass to the request
-	 * @return the JSON response from the server
+	 * @return the response from the server
 	 * @throws ParseException
 	 * @throws IOException
-	 * @throws JSONException
 	 */
-	public JSONObject doPost(String url, Map<String, String> params)
-			throws ParseException, IOException, JSONException {
+	public byte[] doPost(String url, Map<String, String> params)
+			throws ParseException, IOException {
 		log.debug("doPost");
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
@@ -151,8 +141,7 @@ public class PackageManagerAPIDAO {
 			log.debug("Recieving response");
 			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
 				HttpEntity resEntity = response.getEntity();
-				String responseStr = EntityUtils.toString(resEntity, "UTF-8");
-				return new JSONObject(responseStr);
+				return EntityUtils.toByteArray(resEntity);
 			} else {
 				throw new IOException("Invalid response: "
 						+ response.getStatusLine().getStatusCode() + " "
@@ -174,13 +163,12 @@ public class PackageManagerAPIDAO {
 	 *            the url to post to
 	 * @param file
 	 *            the file to post
-	 * @return the JSON response from the server
+	 * @return the response from the server
 	 * @throws ClientProtocolException
 	 * @throws IOException
-	 * @throws JSONException
 	 */
-	public JSONObject postFile(String url, File file)
-			throws ClientProtocolException, IOException, JSONException {
+	public byte[] postFile(String url, File file)
+			throws ClientProtocolException, IOException {
 		log.debug("postFile");
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
@@ -205,8 +193,7 @@ public class PackageManagerAPIDAO {
 			HttpEntity resEntity = response.getEntity();
 
 			log.debug("Recieving response");
-			String responseStr = EntityUtils.toString(resEntity, "UTF-8");
-			return new JSONObject(responseStr);
+			return EntityUtils.toByteArray(resEntity);
 		} finally {
 			try {
 				httpclient.getConnectionManager().shutdown();
