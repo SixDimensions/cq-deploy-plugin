@@ -106,14 +106,4 @@ public interface PackageManagerService {
 	 *             an exception occurs attempting to upload the package
 	 */
 	public void upload(String path, File pkg) throws Exception;
-
-	/**
-	 * Validate the specified path is a valid path for a package to use. Does
-	 * not validate that a package exists at this location, only that one might.
-	 * 
-	 * @param path
-	 *            the path to validate
-	 * @return true if the path is valid, false otherwise
-	 */
-	public boolean validatePath(String path);
 }

@@ -217,18 +217,6 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 					+ response.getCode() + " message: " + response.getMessage());
 		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#validatePath
-	 * (java.lang.String)
-	 */
-	public boolean validatePath(String path) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }
 
 /**
