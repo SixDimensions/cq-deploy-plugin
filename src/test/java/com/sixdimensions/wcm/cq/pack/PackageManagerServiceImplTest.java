@@ -23,7 +23,7 @@ public class PackageManagerServiceImplTest {
 		config.setPort("4502");
 		config.setUseLegacy(false);
 		config.setUser("admin");
-		config.setPassword("bob");
+		config.setPassword("admin");
 		config.setErrorOnFailure(false);
 		config.setLog(log);
 		
@@ -42,6 +42,6 @@ public class PackageManagerServiceImplTest {
 	@Test
 	public void testDelete() throws Exception{
 		log.info("Testing Delete");
-		packageManagerSvc.delete("my_packages/export-app-1.0.zip");
+		packageManagerSvc.delete("test/test-1.0.0.zip");
 	}
 }
