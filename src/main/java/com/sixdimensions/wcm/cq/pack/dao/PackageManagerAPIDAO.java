@@ -26,13 +26,14 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
-import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.maven.plugin.logging.Log;
@@ -71,18 +72,18 @@ public class PackageManagerAPIDAO {
 	 * @return the response from the server
 	 * @throws ParseException
 	 * @throws IOException
+	 * @throws AuthenticationException
 	 */
-	public byte[] doGet(String url)
-			throws ParseException, IOException {
+	public byte[] doGet(String url) throws ParseException, IOException,
+			AuthenticationException {
 		log.debug("doGet");
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
 			HttpGet httpget = new HttpGet(url);
 
-			httpclient.getCredentialsProvider().setCredentials(
-					AuthScope.ANY,
+			httpget.addHeader(new BasicScheme().authenticate(
 					new UsernamePasswordCredentials(config.getUser(), config
-							.getPassword()));
+							.getPassword()), httpget));
 
 			log.debug("executing request " + httpget.getRequestLine());
 			HttpResponse response = httpclient.execute(httpget);
@@ -116,18 +117,18 @@ public class PackageManagerAPIDAO {
 	 * @return the response from the server
 	 * @throws ParseException
 	 * @throws IOException
+	 * @throws AuthenticationException
 	 */
 	public byte[] doPost(String url, Map<String, String> params)
-			throws ParseException, IOException {
+			throws ParseException, IOException, AuthenticationException {
 		log.debug("doPost");
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
 			HttpPost httppost = new HttpPost(url);
 
-			httpclient.getCredentialsProvider().setCredentials(
-					AuthScope.ANY,
+			httppost.addHeader(new BasicScheme().authenticate(
 					new UsernamePasswordCredentials(config.getUser(), config
-							.getPassword()));
+							.getPassword()), httppost));
 
 			if (params != null) {
 				for (String key : params.keySet()) {
@@ -166,25 +167,26 @@ public class PackageManagerAPIDAO {
 	 * @return the response from the server
 	 * @throws ClientProtocolException
 	 * @throws IOException
+	 * @throws AuthenticationException
 	 */
 	public byte[] postFile(String url, File file)
-			throws ClientProtocolException, IOException {
+			throws ClientProtocolException, IOException,
+			AuthenticationException {
 		log.debug("postFile");
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
 			HttpPost httppost = new HttpPost(url);
 
-			httpclient.getCredentialsProvider().setCredentials(
-					AuthScope.ANY,
+			httppost.addHeader(new BasicScheme().authenticate(
 					new UsernamePasswordCredentials(config.getUser(), config
-							.getPassword()));
+							.getPassword()), httppost));
 
-			FileBody bin = new FileBody(file);
-			log.debug("Posting file: " + file);
+			FileBody fileBody = new FileBody(file);
+			log.debug("Posting file: " + file.getAbsolutePath());
 			log.debug("Post URL: " + url);
 
 			MultipartEntity reqEntity = new MultipartEntity();
-			reqEntity.addPart("bin", bin);
+			reqEntity.addPart("file", fileBody);
 
 			httppost.setEntity(reqEntity);
 
