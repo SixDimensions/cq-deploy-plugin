@@ -37,6 +37,7 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		}
 	}
 
+	private static final String FILE_KEY = "file";
 	private static final String COMMAND_KEY = "?cmd=";
 	private static final String GROUP_KEY = "&group=";
 	private static final String NAME_KEY = "&name=";
@@ -190,24 +191,14 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#preview(java
-	 * .lang.String)
-	 */
-	public void preview(String path) throws Exception {
-		throw new RuntimeException("Preview is not supported in Legacy API");
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
 	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#upload(java
 	 * .lang.String, java.io.File)
 	 */
 	public void upload(String path, File pkg) throws Exception {
 		log.debug("install");
 
-		byte[] result = pmAPI.postFile(assembleUrl(path, COMMAND.UPLOAD), pkg);
+		byte[] result = pmAPI.postFile(assembleUrl(path, COMMAND.UPLOAD),
+				FILE_KEY, pkg);
 
 		log.debug("Result of command: " + new String(result, "UTF-8"));
 
