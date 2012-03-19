@@ -36,6 +36,14 @@ import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 public class PackageMojo extends AbstractMojo {
 
 	/**
+	 * Flag to determine whether or not to first delete the package before
+	 * uploading. Default is false.
+	 * 
+	 * @parameter default-value=false
+	 */
+	private boolean deleteFirst = true;
+
+	/**
 	 * Flag to determine whether or not to quit and throw an error when an API
 	 * call fails. Default is true.
 	 * 
@@ -129,6 +137,9 @@ public class PackageMojo extends AbstractMojo {
 		PackageManagerService packageMgrSvc = PackageManagerService.Factory
 				.getPackageMgr(config);
 		try {
+			if(deleteFirst){
+				packageMgrSvc.delete(path);
+			}
 			packageMgrSvc.upload(path, packageFile);
 			getLog().info("Package upload successful");
 			if (!this.uploadOnly) {
