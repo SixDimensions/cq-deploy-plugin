@@ -27,7 +27,7 @@ public class PackageManagerServiceImplTest {
 		config.setUseLegacy(false);
 		config.setUser("admin");
 		config.setPassword("admin");
-		config.setErrorOnFailure(true);
+		config.setErrorOnFailure(false);
 		config.setLog(log);
 		
 		packageManagerSvc = 
