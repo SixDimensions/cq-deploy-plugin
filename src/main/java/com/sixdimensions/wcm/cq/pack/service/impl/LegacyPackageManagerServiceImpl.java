@@ -86,6 +86,8 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	public void delete(String path) throws Exception {
 		log.debug("delete");
 
+		log.info("Deleting package at path: " + path);
+
 		byte[] result = pmAPI.doGet(assembleUrl(path, COMMAND.DELETE));
 
 		log.debug("Result of command: " + new String(result, "UTF-8"));
@@ -117,6 +119,8 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 */
 	public void install(String path) throws Exception {
 		log.debug("install");
+
+		log.info("Installing package at path: " + path);
 
 		byte[] result = pmAPI.doGet(assembleUrl(path, COMMAND.INSTALL));
 
@@ -177,9 +181,9 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 
 		Response responseObj = new Response(SUCCESS_KEY.equals(responseCode),
 				responseCode, responseMessage);
-		log.info("Response Code: " + responseCode);
+		log.debug("Response Code: " + responseCode);
 		if (SUCCESS_KEY.equals(responseCode)) {
-			log.info("Response Message: " + responseMessage);
+			log.debug("Response Message: " + responseMessage);
 		} else {
 			log.warn("Error Message: " + responseMessage);
 		}
@@ -196,6 +200,9 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 */
 	public void upload(String path, File pkg) throws Exception {
 		log.debug("install");
+
+		log.info("Uploading package " + pkg.getAbsolutePath() + " to path: "
+				+ path);
 
 		byte[] result = pmAPI.postFile(assembleUrl(path, COMMAND.UPLOAD),
 				FILE_KEY, pkg);

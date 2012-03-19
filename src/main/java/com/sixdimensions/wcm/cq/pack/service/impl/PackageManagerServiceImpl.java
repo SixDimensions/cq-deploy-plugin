@@ -97,6 +97,8 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	 */
 	public void delete(String path) throws Exception {
 		log.debug("delete");
+
+		log.info("Deleting package at path: " + path);
 		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
 				+ COMMAND.DELETE.getCmd()), "UTF-8");
 		log.debug("Response: " + responseStr);
@@ -104,6 +106,12 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		JSONObject result = new JSONObject(responseStr);
 		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
 		log.debug("Message: " + result.getString(MESSAGE_KEY));
+
+		if (result.getBoolean(SUCCESS_KEY)) {
+			log.info("Delete succeeded");
+		} else {
+			log.warn("Delete failed: " + result.getString(MESSAGE_KEY));
+		}
 
 		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
 			throw new Exception("Failed to delete package: "
@@ -121,6 +129,7 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	public void dryRun(String path) throws Exception {
 		log.debug("dryRun");
 
+		log.info("Performing Dry Run on package at path: " + path);
 		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
 				+ COMMAND.DRY_RUN.getCmd()), "UTF-8");
 		log.debug("Response: " + responseStr);
@@ -128,6 +137,12 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		JSONObject result = new JSONObject(responseStr);
 		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
 		log.debug("Message: " + result.getString(MESSAGE_KEY));
+
+		if (result.getBoolean(SUCCESS_KEY)) {
+			log.info("Dry Run succeeded");
+		} else {
+			log.warn("Dry Run failed: " + result.getString(MESSAGE_KEY));
+		}
 
 		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
 			throw new Exception("Failed to complete installation dry run: "
@@ -145,6 +160,7 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	public void install(String path) throws Exception {
 		log.debug("install");
 
+		log.info("Installing package at path: " + path);
 		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
 				+ COMMAND.INSTALL.getCmd()), "UTF-8");
 		log.debug("Response: " + responseStr);
@@ -152,6 +168,12 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		JSONObject result = new JSONObject(responseStr);
 		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
 		log.debug("Message: " + result.getString(MESSAGE_KEY));
+
+		if (result.getBoolean(SUCCESS_KEY)) {
+			log.info("Installation succeeded");
+		} else {
+			log.warn("Installation failed: " + result.getString(MESSAGE_KEY));
+		}
 
 		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
 			throw new Exception("Failed to complete installation dry run: "
@@ -168,6 +190,9 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	 */
 	public void upload(String path, File pkg) throws Exception {
 		log.debug("upload");
+
+		log.info("Uploading package " + pkg.getAbsolutePath() + " to path: "
+				+ path);
 		String responseStr = new String(pmAPI.postFile(assembleUrl(path)
 				+ COMMAND.UPLOAD.getCmd(), FILE_KEY, pkg), "UTF-8");
 		log.debug("Response: " + responseStr);
@@ -176,6 +201,11 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
 		log.debug("Message: " + result.getString(MESSAGE_KEY));
 
+		if (result.getBoolean(SUCCESS_KEY)) {
+			log.info("Upload succeeded");
+		} else {
+			log.warn("Upload failed: " + result.getString(MESSAGE_KEY));
+		}
 		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
 			throw new Exception("Failed to preview package: "
 					+ result.getString(MESSAGE_KEY));
