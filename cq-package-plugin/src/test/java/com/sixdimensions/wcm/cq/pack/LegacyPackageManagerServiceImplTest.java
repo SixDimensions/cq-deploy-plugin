@@ -36,18 +36,6 @@ public class LegacyPackageManagerServiceImplTest {
 	}
 
 	@Test
-	public void testPreview() throws Exception {
-		log.info("Testing Preview");
-		try {
-			packageManagerSvc
-					.preview("/etc/packages/day/cq540/product/cq-content-5.4.0.20110218.zip");
-			fail("RuntimeException expected");
-		} catch (RuntimeException re) {
-			log.info("Exception caught as expected");
-		}
-	}
-
-	@Test
 	public void testUpload() throws Exception {
 		log.info("Testing Upload");
 		File f = new File(URLDecoder.decode(getClass().getClassLoader()
