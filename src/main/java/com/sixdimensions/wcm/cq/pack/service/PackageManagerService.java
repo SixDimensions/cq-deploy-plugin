@@ -87,13 +87,6 @@ public interface PackageManagerService {
 	 *             an exception occurs attempting to install the package
 	 */
 	public void install(String path) throws Exception;
-	
-	/**
-	 * 
-	 * @param path
-	 * @throws Exception
-	 */
-	public void preview(String path) throws Exception;
 
 	/**
 	 * Uploads a package into CQ.
