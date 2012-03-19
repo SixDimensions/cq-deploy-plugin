@@ -20,7 +20,6 @@ package com.sixdimensions.wcm.cq.pack.dao;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -119,8 +118,8 @@ public class PackageManagerAPIDAO {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	public byte[] doPost(String url, Map<String, String> params)
-			throws ParseException, IOException, AuthenticationException {
+	public byte[] doPost(String url) throws ParseException, IOException,
+			AuthenticationException {
 		log.debug("doPost");
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
@@ -129,12 +128,6 @@ public class PackageManagerAPIDAO {
 			httppost.addHeader(new BasicScheme().authenticate(
 					new UsernamePasswordCredentials(config.getUser(), config
 							.getPassword()), httppost));
-
-			if (params != null) {
-				for (String key : params.keySet()) {
-					httppost.getParams().setParameter(key, params.get(key));
-				}
-			}
 
 			log.debug("executing request " + httppost.getRequestLine());
 			HttpResponse response = httpclient.execute(httppost);
@@ -171,7 +164,7 @@ public class PackageManagerAPIDAO {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	public byte[] postFile(String url, File file)
+	public byte[] postFile(String url, String fileAttr, File file)
 			throws ClientProtocolException, IOException,
 			AuthenticationException {
 		log.debug("postFile");
@@ -188,7 +181,7 @@ public class PackageManagerAPIDAO {
 			log.debug("Post URL: " + url);
 
 			MultipartEntity reqEntity = new MultipartEntity();
-			reqEntity.addPart("file", fileBody);
+			reqEntity.addPart(fileAttr, fileBody);
 
 			httppost.setEntity(reqEntity);
 
