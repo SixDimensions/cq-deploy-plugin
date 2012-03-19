@@ -64,7 +64,7 @@ public class PackageMojo extends AbstractMojo {
 	 * "${project.artifactId}-${project.version}.${project.packaging}"
 	 * 
 	 * @parameter expression=
-	 *            "${project.artifactId}-${project.version}.${project.packaging}"
+	 *            "${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}"
 	 * @required
 	 */
 	private File packageFile;
@@ -82,7 +82,7 @@ public class PackageMojo extends AbstractMojo {
 	 * 
 	 * @parameter
 	 * @required expression=
-	 *           "${project.artifactId}-${project.version}.${project.packaging}"
+	 *           "${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}"
 	 */
 	private String path;
 
@@ -111,7 +111,7 @@ public class PackageMojo extends AbstractMojo {
 	/**
 	 * The username to use when connecting. Default is 'admin'.
 	 * 
-	 * @parameter
+	 * @parameter default-value="admin"
 	 */
 	private String user;
 
@@ -151,6 +151,6 @@ public class PackageMojo extends AbstractMojo {
 			throw new MojoExecutionException(
 					"Exception uploading/installing package.", e);
 		}
-		getLog().info("PackageMojo Completed Successfully");
+		getLog().info("Package Upload/Installation Completed Successfully");
 	}
 }
