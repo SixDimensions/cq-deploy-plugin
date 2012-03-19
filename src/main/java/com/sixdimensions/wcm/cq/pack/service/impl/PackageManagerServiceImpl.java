@@ -27,23 +27,56 @@ import com.sixdimensions.wcm.cq.pack.dao.PackageManagerAPIDAO;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
+/**
+ * Implementation of the Package Manager Service based on the new CQ Package
+ * Manager API.
+ * 
+ * @author klcodanr
+ */
 public class PackageManagerServiceImpl implements PackageManagerService {
-	private PackageManagerAPIDAO pmAPI;
-	private Log log;
-	private PackageManagerConfig config;
+	private static enum COMMAND {
+		DELETE("?cmd=delete"), DRY_RUN("?cmd=dryrun"), INSTALL("?cmd=install"), UPLOAD(
+				"?cmd=upload");
+		private final String cmd;
+
+		COMMAND(String cmd) {
+			this.cmd = cmd;
+		}
+
+		public String getCmd() {
+			return cmd;
+		}
+	}
+
+	private static final String FILE_KEY = "package";
+	private static final String MESSAGE_KEY = "msg";
 	private static final String PACK_MGR_PATH = "/crx/packmgr/service/.json";
 	private static final String PACKAGE_BASE_PATH = "/etc/packages/";
-	private static final String DELETE_COMMAND = "?cmd=delete";
-	private static final String PREVIEW_COMMAND = "?cmd=preview";
 	private static final String SUCCESS_KEY = "success";
-	private static final String MESSAGE_KEY = "msg";
+	private PackageManagerConfig config;
+	private Log log;
+	private PackageManagerAPIDAO pmAPI;
 
+	/**
+	 * Create a new Package Manager Service instance.
+	 * 
+	 * @param config
+	 *            the configuration with which to instantiate the package
+	 *            manager service
+	 */
 	public PackageManagerServiceImpl(PackageManagerConfig config) {
 		log = config.getLog();
 		this.config = config;
 		pmAPI = new PackageManagerAPIDAO(config);
 	}
 
+	/**
+	 * Generates a url from the specified path and configuration.
+	 * 
+	 * @param path
+	 *            the path of the package to be updated
+	 * @return the url
+	 */
 	protected String assembleUrl(String path) {
 		log.debug("assembleUrl");
 		if (path.startsWith("/")) {
@@ -55,11 +88,20 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#delete(java
+	 * .lang.String)
+	 */
 	public void delete(String path) throws Exception {
 		log.debug("delete");
-		JSONObject result = new JSONObject(pmAPI.doPost(assembleUrl(path)
-				+ DELETE_COMMAND, null));
+		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
+				+ COMMAND.DELETE.getCmd()), "UTF-8");
+		log.debug("Response: " + responseStr);
 
+		JSONObject result = new JSONObject(responseStr);
 		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
 		log.debug("Message: " + result.getString(MESSAGE_KEY));
 
@@ -69,30 +111,67 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#dryRun(java
+	 * .lang.String)
+	 */
 	public void dryRun(String path) throws Exception {
-		// TODO Auto-generated method stub
+		log.debug("dryRun");
 
+		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
+				+ COMMAND.DRY_RUN.getCmd()), "UTF-8");
+		log.debug("Response: " + responseStr);
+
+		JSONObject result = new JSONObject(responseStr);
+		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
+		log.debug("Message: " + result.getString(MESSAGE_KEY));
+
+		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
+			throw new Exception("Failed to complete installation dry run: "
+					+ result.getString(MESSAGE_KEY));
+		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#install(java
+	 * .lang.String)
+	 */
 	public void install(String path) throws Exception {
-		// TODO Auto-generated method stub
+		log.debug("install");
 
+		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
+				+ COMMAND.INSTALL.getCmd()), "UTF-8");
+		log.debug("Response: " + responseStr);
+
+		JSONObject result = new JSONObject(responseStr);
+		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
+		log.debug("Message: " + result.getString(MESSAGE_KEY));
+
+		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
+			throw new Exception("Failed to complete installation dry run: "
+					+ result.getString(MESSAGE_KEY));
+		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#upload(java
+	 * .lang.String, java.io.File)
+	 */
 	public void upload(String path, File pkg) throws Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	public boolean validatePath(String path) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void preview(String path) throws Exception {
-		log.debug("preview");
-		JSONObject result = new JSONObject(pmAPI.doPost(assembleUrl(path)
-				+ PREVIEW_COMMAND, null));
+		log.debug("upload");
+		String responseStr = new String(pmAPI.postFile(assembleUrl(path)
+				+ COMMAND.UPLOAD.getCmd(), FILE_KEY, pkg), "UTF-8");
+		log.debug("Response: " + responseStr);
+		JSONObject result = new JSONObject(responseStr);
 
 		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
 		log.debug("Message: " + result.getString(MESSAGE_KEY));
@@ -102,5 +181,4 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 					+ result.getString(MESSAGE_KEY));
 		}
 	}
-
 }
