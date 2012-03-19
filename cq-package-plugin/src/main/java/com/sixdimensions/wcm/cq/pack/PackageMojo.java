@@ -19,12 +19,11 @@
 package com.sixdimensions.wcm.cq.pack;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
+import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
 /**
@@ -35,46 +34,112 @@ import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
  * @phase install
  */
 public class PackageMojo extends AbstractMojo {
+
 	/**
-	 * Location of the file.
+	 * Flag to determine whether or not to quit and throw an error when an API
+	 * call fails. Default is true.
 	 * 
-	 * @parameter expression="${project.build.directory}"
-	 * @required
+	 * @parameter default-value=true
 	 */
-	private File outputDirectory;
-	
+	private boolean errorOnFailure = true;
+
 	/**
-	 * Location of the file.
+	 * The host of the server to connect to, including protocol. Default is
+	 * 'http://localhost'.
 	 * 
-	 * @parameter expression="${project.build.directory}"
+	 * @parameter default-value="http://localhost"
 	 */
 	private String host;
 
+	/**
+	 * Location of the file. Default is
+	 * "${project.artifactId}-${project.version}.${project.packaging}"
+	 * 
+	 * @parameter expression=
+	 *            "${project.artifactId}-${project.version}.${project.packaging}"
+	 * @required
+	 */
+	private File packageFile;
+
+	/**
+	 * The password to use when connecting. Default is 'admin'.
+	 * 
+	 * @parameter default-value="admin"
+	 */
+	private String password;
+
+	/**
+	 * The path to upload the package to. Default is
+	 * "${project.artifactId}-${project.version}.${project.packaging}"
+	 * 
+	 * @parameter
+	 * @required expression=
+	 *           "${project.artifactId}-${project.version}.${project.packaging}"
+	 */
+	private String path;
+
+	/**
+	 * The port of the server to connect to. Default is 'admin'.
+	 * 
+	 * @parameter default-value="4502"
+	 */
+	private String port;
+
+	/**
+	 * Flag to determine whether or not to only upload and not install the
+	 * package. False by default.
+	 * 
+	 * @parameter default-value=false
+	 */
+	private boolean uploadOnly;
+
+	/**
+	 * Flag to determine whether or not to use the Legacy API. False by default.
+	 * 
+	 * @parameter default-value=false
+	 */
+	private boolean useLegacy;
+
+	/**
+	 * The username to use when connecting. Default is 'admin'.
+	 * 
+	 * @parameter
+	 */
+	private String user;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.maven.plugin.AbstractMojo#execute()
+	 */
 	public void execute() throws MojoExecutionException {
-		File f = outputDirectory;
-		PackageManagerService.Factory.getPackageMgr(null);
+		getLog().info("execute");
 
-		if (!f.exists()) {
-			f.mkdirs();
-		}
+		getLog().debug("Instantiating configuration object.");
+		PackageManagerConfig config = new PackageManagerConfig();
+		config.setErrorOnFailure(errorOnFailure);
+		config.setHost(host);
+		config.setLog(getLog());
+		config.setPassword(password);
+		config.setPort(port);
+		config.setUseLegacy(useLegacy);
+		config.setUser(user);
 
-		File touch = new File(f, "touch.txt");
-
-		FileWriter w = null;
+		getLog().debug("Retrieving service");
+		PackageManagerService packageMgrSvc = PackageManagerService.Factory
+				.getPackageMgr(config);
 		try {
-			w = new FileWriter(touch);
-
-			w.write("touch.txt");
-		} catch (IOException e) {
-			throw new MojoExecutionException("Error creating file " + touch, e);
-		} finally {
-			if (w != null) {
-				try {
-					w.close();
-				} catch (IOException e) {
-					// ignore
-				}
+			packageMgrSvc.upload(path, packageFile);
+			getLog().info("Package upload successful");
+			if (!this.uploadOnly) {
+				packageMgrSvc.install(path);
+				getLog().info("Package installation successful");
 			}
+		} catch (Exception e) {
+			getLog().error("Exception uploading/installing package.", e);
+			throw new MojoExecutionException(
+					"Exception uploading/installing package.", e);
 		}
+		getLog().info("PackageMojo Completed Successfully");
 	}
 }
