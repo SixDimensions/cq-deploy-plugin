@@ -23,7 +23,7 @@ public class LegacyPackageManagerServiceImplTest {
 		log.info("Init");
 
 		PackageManagerConfig config = new PackageManagerConfig();
-		config.setHost("http://poc.crownpartners.com");
+		config.setHost("http://localhost");
 		config.setPort("4502");
 		config.setUseLegacy(true);
 		config.setUser("admin");

@@ -22,7 +22,7 @@ public class PackageManagerServiceImplTest {
 		log.info("Init");
 
 		PackageManagerConfig config = new PackageManagerConfig();
-		config.setHost("http://poc.crownpartners.com");
+		config.setHost("http://localhost");
 		config.setPort("4502");
 		config.setUseLegacy(false);
 		config.setUser("admin");
