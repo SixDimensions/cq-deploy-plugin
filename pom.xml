@@ -65,6 +65,6 @@
   </build>
   <scm>
   	<url>http://sourcecontrol.6dlabs.com/svn/sandbox/cq-package-plugin/trunk/cq-package-plugin</url>
-  	<connection>http://sourcecontrol.6dlabs.com/svn/sandbox/cq-package-plugin/trunk/cq-package-plugin</connection>
+  	<connection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-package-plugin/trunk/cq-package-plugin</connection>
   </scm>
 </project>
