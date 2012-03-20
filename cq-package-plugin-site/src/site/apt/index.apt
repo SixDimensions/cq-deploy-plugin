@@ -1,0 +1,30 @@
+ ------
+ Introduction
+ ------
+ Dan Klco
+ ------
+ 2012-03-19
+ ------
+
+Adobe CQ Package Plugin
+
+  Plugin for installing CQ Packages into CQ repositories using the Package Manager API.  This plugin replaces fragile
+  cURL or Groovy invocations with a reliable Java-based library.  
+
+* Goals Overview
+
+  * {{{./usage.html}install-package}} installs the package into the CQ Repository.
+
+  []
+
+* Usage
+
+  General instructions on how to use the Adobe CQ Package Plugin can be found on the {{{./usage.html}usage page}}. 
+  Some more specific use cases are described in the examples given below.
+
+* Examples
+
+  To provide you with better understanding of some usages of the Adobe CQ Package Plugin,
+  you can take a look at the following examples:
+
+  * {{{./examples/pom.xml}Sample POM}}
