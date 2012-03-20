@@ -3,7 +3,7 @@
 
   <groupId>com.sixdimensions.wcm.cq</groupId>
   <artifactId>cq-package-plugin</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>cq-package-plugin Maven Plugin</name>
@@ -63,7 +63,7 @@
     </plugins>
   </build>
   <scm>
-  	<url>http://sourcecontrol.6dlabs.com/svn/sandbox/cq-package-plugin/tags/cq-package-plugin-0.0.1</url>
-  	<connection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-package-plugin/tags/cq-package-plugin-0.0.1</connection>
+  	<url>http://sourcecontrol.6dlabs.com/svn/sandbox/cq-package-plugin/trunk/cq-package-plugin</url>
+  	<connection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-package-plugin/trunk/cq-package-plugin</connection>
   </scm>
 </project>
