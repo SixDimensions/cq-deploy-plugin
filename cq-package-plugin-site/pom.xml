@@ -1,40 +1,56 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.sixdimensions.wcm.cq</groupId>
-  <artifactId>cq-package-plugin-site</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+	<groupId>com.sixdimensions.wcm.cq</groupId>
+	<artifactId>cq-package-plugin-site</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 
-  <name>Maven</name>
-  <url>http://maven.apache.org/</url>
-  <inceptionYear>2001</inceptionYear>
+	<name>CQ Package Plugin</name>
+	<url>http://cq-package-plugin.6dlabs.com/</url>
+	<inceptionYear>2012</inceptionYear>
 
-  <distributionManagement>
-    <site>
-      <id>website</id>
-      <url>file://C:/6ddev/workspaces/6Dscl/target/deployed-site</url>
-    </site>
-  </distributionManagement>
+	<distributionManagement>
+		<site>
+			<id>cq-package-plugin.6dlabs.com.com</id>
+			<url>scp://www.6dlabs.com/var/www/vhosts/cq-package-plugin/htdocs/</url>
+		</site>
+	</distributionManagement>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <version>2.5.1</version><!-- same version as build plugin -->
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>report</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-    </plugins>
-  </reporting>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>2.5.1</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>2.2</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-ssh</artifactId>
+						<version>1.0-beta-7</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
 </project>
