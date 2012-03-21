@@ -36,9 +36,66 @@ Usage
 
 -------------------
 
-*Configuration Values
+*Required Configuration Values
 
-**Configuration Values 1
+  <<path>>
+  
+  The path to upload the package to. Default is "${project.artifactId}-${project.version}.${project.packaging}".  
+  
+  The format of this value varies depending on whether you are using the new or legacy Package Manager.  The new package manager requires the version number 
+  and packaging to be appended to the end of the filename in the format: ${project.artifactId}-${project.version}.${project.packaging}, whereas the legacy package requires only the filename without
+  the version number and packaging.
 
- To use the Adobe CQ Package Plugin with the default values you only need to specify the path
- for your package inside the CQ Package Manager.
+*Optional Configuration Values
+
+  The configuration values below can be used to further configure the CQ Package Manager.  In most cases they will not be required.
+  
+
+  <<deleteFirst>>
+  
+  Flag to determine whether or not to first delete the package before uploading. Default is false.
+
+
+  <<errorOnFailure>>
+  
+  Flag to determine whether or not to quit and throw an error when an API call fails. Default is true.
+  
+  
+  <<host>>
+  
+  The host of the server to connect to, including protocol. Default is 'http://localhost'.
+  
+  
+  <<packageFile>>
+  
+  Location of the file. Default is "${project.artifactId}-${project.version}.${project.packaging}"
+  
+  
+  <<password>>
+  
+  The password to use when connecting. Default is 'admin'.
+  
+  
+  <<path>>
+  
+  The path to upload the package to. Default is "${project.artifactId}-${project.version}.${project.packaging}"
+  
+  
+  <<port>>
+  
+  The port of the server to connect to. Default is '4502'.
+  
+  
+  <<uploadOnly>>
+  
+  Flag to determine whether or not to only upload and not install the package. False by default.
+  
+  
+  <<useLegacy>>
+  
+  Flag to determine whether or not to use the Legacy API. False by default.
+  
+  
+  <<user>>
+  
+  The username to use when connecting. Default is 'admin'.
