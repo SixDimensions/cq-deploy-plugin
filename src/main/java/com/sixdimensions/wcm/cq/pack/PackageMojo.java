@@ -20,9 +20,10 @@ package com.sixdimensions.wcm.cq.pack;
 
 import java.io.File;
 
-import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
+import com.sixdimensions.wcm.cq.AbstractCQMojo;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
@@ -33,7 +34,7 @@ import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
  * 
  * @phase install
  */
-public class PackageMojo extends AbstractMojo {
+public class PackageMojo extends AbstractCQMojo implements Mojo {
 
 	/**
 	 * Flag to determine whether or not to first delete the package before
@@ -42,22 +43,6 @@ public class PackageMojo extends AbstractMojo {
 	 * @parameter default-value=false
 	 */
 	private boolean deleteFirst = true;
-
-	/**
-	 * Flag to determine whether or not to quit and throw an error when an API
-	 * call fails. Default is true.
-	 * 
-	 * @parameter default-value=true
-	 */
-	private boolean errorOnFailure = true;
-
-	/**
-	 * The host of the server to connect to, including protocol. Default is
-	 * 'http://localhost'.
-	 * 
-	 * @parameter default-value="http://localhost"
-	 */
-	private String host;
 
 	/**
 	 * Location of the file. Default is
@@ -70,13 +55,6 @@ public class PackageMojo extends AbstractMojo {
 	private File packageFile;
 
 	/**
-	 * The password to use when connecting. Default is 'admin'.
-	 * 
-	 * @parameter default-value="admin"
-	 */
-	private String password;
-
-	/**
 	 * The path to upload the package to. Default is
 	 * "${project.artifactId}-${project.version}.${project.packaging}"
 	 * 
@@ -85,13 +63,6 @@ public class PackageMojo extends AbstractMojo {
 	 *           "${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}"
 	 */
 	private String path;
-
-	/**
-	 * The port of the server to connect to. Default is 'admin'.
-	 * 
-	 * @parameter default-value="4502"
-	 */
-	private String port;
 
 	/**
 	 * Flag to determine whether or not to only upload and not install the
@@ -108,13 +79,6 @@ public class PackageMojo extends AbstractMojo {
 	 */
 	private boolean useLegacy;
 
-	/**
-	 * The username to use when connecting. Default is 'admin'.
-	 * 
-	 * @parameter default-value="admin"
-	 */
-	private String user;
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -123,15 +87,9 @@ public class PackageMojo extends AbstractMojo {
 	public void execute() throws MojoExecutionException {
 		getLog().info("execute");
 
-		getLog().debug("Instantiating configuration object.");
 		PackageManagerConfig config = new PackageManagerConfig();
-		config.setErrorOnFailure(errorOnFailure);
-		config.setHost(host);
-		config.setLog(getLog());
-		config.setPassword(password);
-		config.setPort(port);
+		initConfig(config);
 		config.setUseLegacy(useLegacy);
-		config.setUser(user);
 
 		getLog().debug("Retrieving service");
 		PackageManagerService packageMgrSvc = PackageManagerService.Factory
