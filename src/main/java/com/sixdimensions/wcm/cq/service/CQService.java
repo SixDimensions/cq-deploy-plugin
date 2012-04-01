@@ -54,12 +54,8 @@ public interface CQService {
 	 * 
 	 * @param path
 	 *            the path at which to create the folder
-	 * @param createParent
-	 *            if true will create any parent folders as needed, if false it
-	 *            will fail if the parent folders do not exist
 	 */
-	public void createFolder(String path, boolean createParent)
-			throws Exception;
+	public void createFolder(String path) throws Exception;
 
 	/**
 	 * Uploads the specified file to the specified path.
