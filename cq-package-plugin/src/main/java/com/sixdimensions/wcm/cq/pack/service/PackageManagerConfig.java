@@ -18,7 +18,7 @@
  */
 package com.sixdimensions.wcm.cq.pack.service;
 
-import org.apache.maven.plugin.logging.Log;
+import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
 /**
  * Configuration file for the package manager. Passes all of the standard
@@ -26,69 +26,16 @@ import org.apache.maven.plugin.logging.Log;
  * 
  * @author dklco
  */
-public class PackageManagerConfig {
+public class PackageManagerConfig extends CQServiceConfig {
 
-	private Log log;
-	private boolean errorOnFailure = true;
-	private String host = "http://localhost";
-	private String port = "4502";
-	private String user ="admin";
-	private String password = "admin";
 	private boolean useLegacy = false;
-
-	public String getHost() {
-		return host;
-	}
-
-	public Log getLog() {
-		return log;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getPort() {
-		return port;
-	}
-
-	public String getUser() {
-		return user;
-	}
-
-	public boolean isErrorOnFailure() {
-		return errorOnFailure;
-	}
 
 	public boolean isUseLegacy() {
 		return useLegacy;
-	}
-
-	public void setErrorOnFailure(boolean errorOnFailure) {
-		this.errorOnFailure = errorOnFailure;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	public void setLog(Log log) {
-		this.log = log;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public void setPort(String port) {
-		this.port = port;
 	}
 
 	public void setUseLegacy(boolean useLegacy) {
 		this.useLegacy = useLegacy;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
-	}
 }
