@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with the CQ Package Plugin.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.sixdimensions.wcm.cq.pack.dao;
+package com.sixdimensions.wcm.cq.dao;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,7 @@ import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
  * 
  * @author dklco
  */
-public class PackageManagerAPIDAO {
+public class HTTPServiceDAO {
 	private PackageManagerConfig config;
 	private Log log;
 
@@ -55,7 +55,7 @@ public class PackageManagerAPIDAO {
 	 * @param config
 	 *            the configuration to use
 	 */
-	public PackageManagerAPIDAO(PackageManagerConfig config) {
+	public HTTPServiceDAO(PackageManagerConfig config) {
 		this.config = config;
 		this.log = config.getLog();
 	}

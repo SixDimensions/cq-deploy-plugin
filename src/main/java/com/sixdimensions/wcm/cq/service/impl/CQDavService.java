@@ -10,9 +10,11 @@ import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 public class CQDavService implements CQService {
 
 	private Log log;
+	private CQServiceConfig config;
 
 	public CQDavService(CQServiceConfig config) {
 		log = config.getLog();
+		this.config = config;
 	}
 
 	public void createFolder(String path, boolean createParent)
