@@ -30,7 +30,6 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.auth.BasicScheme;
@@ -151,53 +150,6 @@ public class HTTPServiceDAO {
 			}
 		}
 	}
-	
-
-	/**
-	 * Performs a HTTP Post to the specified url with the specified parameters.
-	 * Uses the username and password set in the config.
-	 * 
-	 * @param url
-	 *            the url to post to
-	 * @param param
-	 *            the parameters to pass to the request
-	 * @return the response from the server
-	 * @throws ParseException
-	 * @throws IOException
-	 * @throws AuthenticationException
-	 */
-	public byte[] doPut(String url) throws ParseException, IOException,
-			AuthenticationException {
-		log.debug("doPut");
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		try {
-			HttpPut httpPut = new HttpPut(url);
-
-			httpPut.addHeader(new BasicScheme().authenticate(
-					new UsernamePasswordCredentials(config.getUser(), config
-							.getPassword()), httpPut));
-
-			log.debug("executing request " + httpPut.getRequestLine());
-			HttpResponse response = httpclient.execute(httpPut);
-
-			log.debug("Recieving response");
-			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
-				HttpEntity resEntity = response.getEntity();
-				return EntityUtils.toByteArray(resEntity);
-			} else {
-				HttpEntity resEntity = response.getEntity();
-				log.debug(EntityUtils.toString(resEntity));
-				throw new IOException("Invalid response: "
-						+ response.getStatusLine().getStatusCode() + " "
-						+ response.getStatusLine().getReasonPhrase());
-			}
-		} finally {
-			try {
-				httpclient.getConnectionManager().shutdown();
-			} catch (Exception ignore) {
-			}
-		}
-	}
 
 	/**
 	 * Posts the supplied file to the specified url. Uses the username and
@@ -235,55 +187,6 @@ public class HTTPServiceDAO {
 
 			log.debug("executing request " + httppost.getRequestLine());
 			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity resEntity = response.getEntity();
-
-			log.debug("Recieving response");
-			return EntityUtils.toByteArray(resEntity);
-		} finally {
-			try {
-				httpclient.getConnectionManager().shutdown();
-			} catch (Exception ignore) {
-			}
-		}
-	}
-	
-
-	/**
-	 * Puts the supplied file to the specified url. Uses the username and
-	 * password set in the config.
-	 * 
-	 * @param url
-	 *            the url to post to
-	 * @param file
-	 *            the file to post
-	 * @return the response from the server
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws AuthenticationException
-	 */
-	public byte[] putFile(String url, String fileAttr, File file)
-			throws ClientProtocolException, IOException,
-			AuthenticationException {
-		log.debug("putFile");
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		try {
-			HttpPut httpPut = new HttpPut(url);
-
-			httpPut.addHeader(new BasicScheme().authenticate(
-					new UsernamePasswordCredentials(config.getUser(), config
-							.getPassword()), httpPut));
-
-			FileBody fileBody = new FileBody(file);
-			log.debug("Posting file: " + file.getAbsolutePath());
-			log.debug("Post URL: " + url);
-
-			MultipartEntity reqEntity = new MultipartEntity();
-			reqEntity.addPart(fileAttr, fileBody);
-
-			httpPut.setEntity(reqEntity);
-
-			log.debug("executing request " + httpPut.getRequestLine());
-			HttpResponse response = httpclient.execute(httpPut);
 			HttpEntity resEntity = response.getEntity();
 
 			log.debug("Recieving response");
