@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.sixdimensions.wcm.cq.pack.dao.PackageManagerAPIDAO;
+import com.sixdimensions.wcm.cq.dao.HTTPServiceDAO;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
@@ -45,12 +45,12 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	private static final String SUCCESS_KEY = "200";
 	private PackageManagerConfig config;
 	private Log log;
-	private PackageManagerAPIDAO pmAPI;
+	private HTTPServiceDAO pmAPI;
 
 	public LegacyPackageManagerServiceImpl(PackageManagerConfig config) {
 		log = config.getLog();
 		this.config = config;
-		pmAPI = new PackageManagerAPIDAO(config);
+		pmAPI = new HTTPServiceDAO(config);
 	}
 
 	/**

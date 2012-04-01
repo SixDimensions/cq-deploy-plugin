@@ -23,7 +23,7 @@ import java.io.File;
 import org.apache.maven.plugin.logging.Log;
 import org.json.JSONObject;
 
-import com.sixdimensions.wcm.cq.pack.dao.PackageManagerAPIDAO;
+import com.sixdimensions.wcm.cq.dao.HTTPServiceDAO;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
@@ -55,7 +55,7 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	private static final String SUCCESS_KEY = "success";
 	private PackageManagerConfig config;
 	private Log log;
-	private PackageManagerAPIDAO pmAPI;
+	private HTTPServiceDAO pmAPI;
 
 	/**
 	 * Create a new Package Manager Service instance.
@@ -67,7 +67,7 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	public PackageManagerServiceImpl(PackageManagerConfig config) {
 		log = config.getLog();
 		this.config = config;
-		pmAPI = new PackageManagerAPIDAO(config);
+		pmAPI = new HTTPServiceDAO(config);
 	}
 
 	/**
