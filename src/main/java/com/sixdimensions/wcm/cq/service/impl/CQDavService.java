@@ -22,7 +22,7 @@ import java.io.File;
 
 import org.apache.maven.plugin.logging.Log;
 
-import com.sixdimensions.wcm.cq.dao.DavServiceDAO;
+import com.sixdimensions.wcm.cq.dao.JCRDAO;
 import com.sixdimensions.wcm.cq.service.CQService;
 import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
@@ -30,12 +30,12 @@ public class CQDavService implements CQService {
 
 	private Log log;
 	private CQServiceConfig config;
-	private DavServiceDAO davServiceDAO;
+	private JCRDAO davServiceDAO;
 
 	public CQDavService(CQServiceConfig config) {
 		log = config.getLog();
 		this.config = config;
-		davServiceDAO = new DavServiceDAO(config);
+		davServiceDAO = new JCRDAO(config);
 	}
 
 	/**
