@@ -38,7 +38,7 @@ import com.sixdimensions.wcm.cq.service.CQServiceConfig;
  * 
  * @author klcodanr
  */
-public class DavServiceDAO {
+public class JCRDAO {
 
 	private CQServiceConfig config;
 	private Log log;
@@ -49,7 +49,7 @@ public class DavServiceDAO {
 	 * @param config
 	 *            the configuration to use
 	 */
-	public DavServiceDAO(CQServiceConfig config) {
+	public JCRDAO(CQServiceConfig config) {
 		this.config = config;
 		this.log = config.getLog();
 	}
