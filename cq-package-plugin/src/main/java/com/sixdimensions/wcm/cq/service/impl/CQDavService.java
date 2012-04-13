@@ -30,12 +30,12 @@ public class CQDavService implements CQService {
 
 	private Log log;
 	private CQServiceConfig config;
-	private JCRDAO davServiceDAO;
+	private JCRDAO jcrDAO;
 
 	public CQDavService(CQServiceConfig config) {
 		log = config.getLog();
 		this.config = config;
-		davServiceDAO = new JCRDAO(config);
+		//jcrDAO = new JCRDAO(config);
 	}
 
 	/**
@@ -62,21 +62,27 @@ public class CQDavService implements CQService {
 		String[] parts = path.split("/");
 
 		StringBuffer createPath = new StringBuffer();
-		for (String part : parts) {
-			createPath.append("/" + part);
-			if (createPath.toString().equals("/")) {
-				continue;
+		for (int i = 1; i < parts.length; i++) {
+			createPath.append("/" + parts[i]);
+			if (jcrDAO.folderExists(createPath.toString())) {
+				jcrDAO.createFolder(createPath.toString());
 			}
-			// TODO: Create the folder
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.sixdimensions.wcm.cq.service.CQService#uploadFile(java.io.File,
+	 * java.lang.String)
+	 */
 	public void uploadFile(File file, String path) throws Exception {
 		log.debug("uploadFile");
 
 		log.debug("Uploading file " + file.getAbsolutePath() + " to  path: "
 				+ path);
-		// TODO: Upload the file
+		createFolder(path);
+		jcrDAO.createFile(file, path);
 	}
 
 }
