@@ -18,7 +18,10 @@
  */
 package com.sixdimensions.wcm.cq.dao;
 
+import java.io.File;
 import java.io.IOException;
+
+import javax.jcr.Session;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -49,13 +52,23 @@ public class JCRDAO {
 	 * @param config
 	 *            the configuration to use
 	 */
-	public JCRDAO(CQServiceConfig config) {
-		this.config = config;
+	public JCRDAO(Session session,Log log) {
+		
 		this.log = config.getLog();
 	}
 
-	public void createFolder(String url) {
+	public void createFolder(String path) {
 		log.debug("createFolder");
 		//TODO: Interact with WebDav
+	}
+	public boolean folderExists(String path) {
+		log.debug("folderExists");
+		//TODO: Interact with WebDav
+		return false;
+	}
+
+	public void createFile(File file, String path) {
+		// TODO Auto-generated method stub
+		
 	}
 }
