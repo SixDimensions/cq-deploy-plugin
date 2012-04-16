@@ -26,16 +26,16 @@ import com.sixdimensions.wcm.cq.dao.JCRDAO;
 import com.sixdimensions.wcm.cq.service.CQService;
 import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
-public class CQDavService implements CQService {
+public class CQJCRService implements CQService {
 
 	private Log log;
 	private CQServiceConfig config;
 	private JCRDAO jcrDAO;
 
-	public CQDavService(CQServiceConfig config) {
+	public CQJCRService(CQServiceConfig config) {
 		log = config.getLog();
 		this.config = config;
-		//jcrDAO = new JCRDAO(config);
+		jcrDAO = new JCRDAO(config);
 	}
 
 	/**
@@ -59,15 +59,32 @@ public class CQDavService implements CQService {
 	public void createFolder(String path) throws Exception {
 		log.debug("createFolder");
 
-		String[] parts = path.split("/");
+		jcrDAO.init();
+		if (!jcrDAO.folderExists(path)) {
+			String[] parts = path.split("/");
 
-		StringBuffer createPath = new StringBuffer();
-		for (int i = 1; i < parts.length; i++) {
-			createPath.append("/" + parts[i]);
-			if (jcrDAO.folderExists(createPath.toString())) {
-				jcrDAO.createFolder(createPath.toString());
+			StringBuffer createPath = new StringBuffer();
+			for (int i = 1; i < parts.length; i++) {
+				createPath.append("/" + parts[i]);
+				if (!jcrDAO.folderExists(createPath.toString())) {
+					jcrDAO.createFolder(createPath.toString());
+				}
 			}
 		}
+		jcrDAO.shutdown();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.sixdimensions.wcm.cq.service.CQService#delete(java.lang.String)
+	 */
+	public void delete(String path) throws Exception {
+		log.debug("delete");
+
+		jcrDAO.init();
+		jcrDAO.delete(path);
+		jcrDAO.shutdown();
 	}
 
 	/*
@@ -81,8 +98,12 @@ public class CQDavService implements CQService {
 
 		log.debug("Uploading file " + file.getAbsolutePath() + " to  path: "
 				+ path);
+
 		createFolder(path);
-		jcrDAO.createFile(file, path);
+
+		jcrDAO.init();
+		jcrDAO.uploadFile(file, path);
+		jcrDAO.shutdown();
 	}
 
 }
