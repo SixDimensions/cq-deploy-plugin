@@ -20,7 +20,7 @@ package com.sixdimensions.wcm.cq.service;
 
 import java.io.File;
 
-import com.sixdimensions.wcm.cq.service.impl.CQDavService;
+import com.sixdimensions.wcm.cq.service.impl.CQJCRService;
 
 /**
  * Service for interacting with CQ over the WebDav protocol. Essentially using
@@ -44,7 +44,7 @@ public interface CQService {
 		 * @return the instance of the Package Manager Service
 		 */
 		public static CQService getService(CQServiceConfig config) {
-			CQService svc = new CQDavService(config);
+			CQService svc = new CQJCRService(config);
 			return svc;
 		}
 	}
@@ -56,6 +56,14 @@ public interface CQService {
 	 *            the path at which to create the folder
 	 */
 	public void createFolder(String path) throws Exception;
+
+	/**
+	 * Deletes everything under the specified path.
+	 * 
+	 * @param path
+	 *            the path to delete
+	 */
+	public void delete(String path) throws Exception;
 
 	/**
 	 * Uploads the specified file to the specified path.

@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.sixdimensions.wcm.cq.service.CQService;
 import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
-public class CQDavServiceTest {
+public class CQJCRServiceTest {
 
 	private CQService cqSvc;
 	private Log log = new SystemStreamLog();
@@ -21,7 +21,7 @@ public class CQDavServiceTest {
 		log.info("Init");
 
 		CQServiceConfig config = new CQServiceConfig();
-		config.setHost("http://poc.crownpartners.com");
+		config.setHost("http://localhost");
 		config.setPort("4502");
 		config.setUser("admin");
 		config.setPassword("admin");
@@ -46,6 +46,15 @@ public class CQDavServiceTest {
 		File f = new File(URLDecoder.decode(getClass().getClassLoader()
 				.getResource("test-bundle-1.0.0.jar").getPath(), "UTF-8"));
 		cqSvc.uploadFile(f, "/apps/bundles/install");
-		log.info("Upload Folder Complete");
+		log.info("Upload File Complete");
+	}
+
+	@Test
+	public void testDeleteFile() throws Exception {
+		log.info("testDeleteFile");
+
+		cqSvc.delete("/apps/bundles/install/test-bundle-1.0.0.jar");
+
+		log.info("Delete File Complete");
 	}
 }
