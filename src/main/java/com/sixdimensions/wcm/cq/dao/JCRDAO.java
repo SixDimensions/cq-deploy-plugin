@@ -124,6 +124,13 @@ public class JCRDAO {
 		session.save();
 	}
 
+	/**
+	 * Recursively deletes the specified node and all subnodes.
+	 * 
+	 * @param node
+	 *            the node to delete
+	 * @throws RepositoryException
+	 */
 	protected void delete(Node node) throws RepositoryException {
 		log.debug("delete");
 
