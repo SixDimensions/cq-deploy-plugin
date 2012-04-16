@@ -22,6 +22,9 @@ import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
 
+import com.sixdimensions.wcm.cq.service.CQService;
+import com.sixdimensions.wcm.cq.service.CQServiceConfig;
+
 /**
  * Installs the specified bundle into Adobe CQ to a configurable path. This path
  * should be something like /apps/{APP_NAME}/install so it will be picked up by
@@ -56,9 +59,24 @@ public class InstallBundleMojo extends AbstractCQMojo {
 	 * @see org.apache.maven.plugin.AbstractMojo#execute()
 	 */
 	public void execute() throws MojoExecutionException {
+		getLog().info("execute");
 
-		// TODO: First create the folders at the installation path
-		// TODO: Next
+		getLog().info("Initializing");
+		CQServiceConfig config = new CQServiceConfig();
+		initConfig(config);
+		CQService cqSvc = CQService.Factory.getService(config);
+
+		try {
+			getLog().info("Creating folders");
+			cqSvc.createFolder(path);
+			
+			getLog().info("Uploading bundle");
+			cqSvc.uploadFile(bundleFile, path);
+
+			getLog().info("Bundle installation complete");
+		} catch (Exception e) {
+			throw new MojoExecutionException("Exception installing bundle");
+		}
 	}
 
 }
