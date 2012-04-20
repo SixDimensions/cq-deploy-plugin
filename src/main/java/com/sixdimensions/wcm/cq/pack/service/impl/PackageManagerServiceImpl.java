@@ -207,7 +207,7 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 			log.warn("Upload failed: " + result.getString(MESSAGE_KEY));
 		}
 		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
-			throw new Exception("Failed to preview package: "
+			throw new Exception("Failed to upload package: "
 					+ result.getString(MESSAGE_KEY));
 		}
 	}
