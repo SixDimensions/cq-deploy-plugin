@@ -38,9 +38,9 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 
 	/**
 	 * Flag to determine whether or not to first delete the package before
-	 * uploading. Default is false.
+	 * uploading. Default is true.
 	 * 
-	 * @parameter default-value=false
+	 * @parameter default-value=true
 	 */
 	private boolean deleteFirst = true;
 
@@ -50,7 +50,6 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 	 * 
 	 * @parameter expression=
 	 *            "${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}"
-	 * @required
 	 */
 	private File packageFile;
 
@@ -58,9 +57,8 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 	 * The path to upload the package to. Default is
 	 * "${project.artifactId}-${project.version}.${project.packaging}"
 	 * 
-	 * @parameter
-	 * @required expression=
-	 *           "${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}"
+	 * @parameter expression=
+	 *            "${project.artifactId}-${project.version}.${project.packaging}"
 	 */
 	private String path;
 
@@ -91,12 +89,23 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 		initConfig(config);
 		config.setUseLegacy(useLegacy);
 
+		getLog().info(
+				"Connecting to server: " + config.getHost() + ":"
+						+ config.getPort());
+		getLog().info("Connecting with user: " + config.getUser());
+
 		getLog().debug("Retrieving service");
 		PackageManagerService packageMgrSvc = PackageManagerService.Factory
 				.getPackageMgr(config);
 		try {
-			if(deleteFirst){
-				packageMgrSvc.delete(path);
+			if (deleteFirst) {
+				try {
+					packageMgrSvc.delete(path);
+				} catch (Exception e) {
+					getLog().warn(
+							"Exception deleting existing package, continuing with installation.",
+							e);
+				}
 			}
 			packageMgrSvc.upload(path, packageFile);
 			getLog().info("Package upload successful");
