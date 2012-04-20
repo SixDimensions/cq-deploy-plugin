@@ -38,10 +38,10 @@ public class InstallBundleMojo extends AbstractCQMojo {
 
 	/**
 	 * Location of the bundle file. Default is
-	 * "${project.artifactId}-${project.version}.${project.packaging}"
+	 * "${project.artifactId}-${project.version}.jar"
 	 * 
 	 * @parameter expression=
-	 *            "${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}"
+	 *            "${project.build.directory}/${project.artifactId}-${project.version}.jar"
 	 * @required
 	 */
 	private File bundleFile;
@@ -64,13 +64,20 @@ public class InstallBundleMojo extends AbstractCQMojo {
 		getLog().info("Initializing");
 		CQServiceConfig config = new CQServiceConfig();
 		initConfig(config);
+
+		getLog().info(
+				"Connecting to server: " + config.getHost() + ":"
+						+ config.getPort());
+		getLog().info("Connecting with user: " + config.getUser());
 		CQService cqSvc = CQService.Factory.getService(config);
 
 		try {
-			getLog().info("Creating folders");
+			getLog().info("Creating folders: " + path);
 			cqSvc.createFolder(path);
-			
-			getLog().info("Uploading bundle");
+
+			getLog().info(
+					"Uploading bundle " + bundleFile.getAbsolutePath()
+							+ " to path " + path);
 			cqSvc.uploadFile(bundleFile, path);
 
 			getLog().info("Bundle installation complete");
