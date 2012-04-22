@@ -12,8 +12,9 @@ install-package
 
 *How to use install a package with the CQ Deploy Plugin
 
- To use the Adobe CQ Package Plugin with the default values you only need to specify the path
- for your package inside the CQ Package Manager.
+ The Adobe CQ Deploy Plugin can be used to install a package by adding the following plugin into your POM.  In most
+ cases the default configuration values will suffice for developer deployments, however a number of optional configuration 
+ values are also provided for more advanced deployments.
 
 -------------------
 
@@ -36,21 +37,11 @@ install-package
 
 -------------------
 
-*Required Configuration Values
-
-  <<path>>
-  
-  The path to upload the package to. Default is "${project.artifactId}-${project.version}.${project.packaging}".  
-  
-  The format of this value varies depending on whether you are using the new or legacy Package Manager.  The new package manager requires the version number 
-  and packaging to be appended to the end of the filename in the format: ${project.artifactId}-${project.version}.${project.packaging}, whereas the legacy package requires only the filename without
-  the version number and packaging.
-
-*Optional Configuration Values
+*Configuration Values
 
   The configuration values below can be used to further configure the CQ Package Manager.  In most cases they will not be required.
   
-
+  
   <<deleteFirst>>
   
   Flag to determine whether or not to first delete the package before uploading. Default is false.
@@ -77,8 +68,7 @@ install-package
   
   
   <<path>>
-  
-  The path to upload the package to. Default is "${project.artifactId}-${project.version}.${project.packaging}"
+  The path to upload the package to. Default is '${project.artifactId}-${project.version}.jar'
   
   
   <<port>>
