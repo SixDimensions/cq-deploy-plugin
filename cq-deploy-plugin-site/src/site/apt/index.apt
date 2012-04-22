@@ -8,9 +8,9 @@
 
 Adobe CQ Deploy Plugin
 
-  Plugin for installing CQ Packages and Bundles into CQ repositories using the Package Manager API. 
-  This plugin replaces fragile cURL or Groovy invocations with a reliable Java-based library.  And 
-  provides a consistent and compatible way of deploying bundles and packages.
+  Maven Plugin for installing CQ Packages and Bundles into CQ repositories using the Package Manager 
+  and Java Content Repository APIs.  this plugin replaces fragile cURL or Groovy invocations with a 
+  reliable Java-based library.  And provides a consistent and compatible way of deploying bundles and packages.
 
 * Goals Overview
 

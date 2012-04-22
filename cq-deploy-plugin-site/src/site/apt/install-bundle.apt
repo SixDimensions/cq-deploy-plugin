@@ -8,7 +8,7 @@
 
 install-bundle
 
- This plugin is used to upload and install bundles into a CQ repository.
+ This goal is used to upload and install bundles into a CQ repository.
 
 *How to use install a bundle with the CQ Deploy Plugin
 

@@ -8,7 +8,7 @@
 
 install-package
 
- This plugin is used to upload and install Adobe CQ packages into a CQ repository.
+ This goal is used to upload and install Adobe CQ packages into a CQ repository.
 
 *How to use install a package with the CQ Deploy Plugin
 
