@@ -6,25 +6,25 @@
  2012-03-19
  ------
 
-Adobe CQ Package Plugin
+Adobe CQ Deploy Plugin
 
-  Plugin for installing CQ Packages into CQ repositories using the Package Manager API.  This plugin replaces fragile
-  cURL or Groovy invocations with a reliable Java-based library.  
+  Plugin for installing CQ Packages and Bundles into CQ repositories using the Package Manager API. 
+  This plugin replaces fragile cURL or Groovy invocations with a reliable Java-based library.  And 
+  provides a consistent and compatible way of deploying bundles and packages.
 
 * Goals Overview
 
-  * {{{./usage.html}install-package}} installs the package into the CQ Repository.
-
-  []
+  * {{{./install-package.html}install-package}} installs the package into the CQ Repository.
+  * {{{./install-bundle.html}install-bundle}} installs a bundle into the CQ Repository.
 
 * Usage
 
-  General instructions on how to use the Adobe CQ Package Plugin can be found on the {{{./usage.html}usage page}}. 
+  General instructions on how to use the Adobe CQ Deploy Plugin can be found on the {{{./goals.html}goals page}}. 
   Some more specific use cases are described in the examples given below.
 
 * Examples
 
-  To provide you with better understanding of some usages of the Adobe CQ Package Plugin,
+  To provide you with better understanding of some usages of the Adobe CQ Deploy Plugin,
   you can take a look at the following examples:
 
   * {{{./examples/pom.xml}Sample POM}}

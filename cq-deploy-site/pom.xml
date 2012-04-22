@@ -6,14 +6,14 @@
 	<artifactId>cq-deploy-site</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>CQ Package Plugin</name>
-	<url>http://cq-package-plugin.6dlabs.com/</url>
+	<name>CQ Deploy Plugin Site</name>
+	<url>http://cq-deploy.6dlabs.com/</url>
 	<inceptionYear>2012</inceptionYear>
 
 	<distributionManagement>
 		<site>
-			<id>cq-package-plugin.6dlabs.com.com</id>
-			<url>scp://www.6dlabs.com/var/www/vhosts/cq-package-plugin/htdocs/</url>
+			<id>cq-deploy.6dlabs.com.com</id>
+			<url>scp://www.6dlabs.com/var/www/vhosts/cq-deploy/htdocs/</url>
 		</site>
 	</distributionManagement>
 
