@@ -10,7 +10,7 @@
 	<name>Adobe CQ Deploy Maven Plugin</name>
 	<description>Maven plugin for automating code deployments to Adobe CQ.</description>
 	<url>http://cq-deploy.6dlabs.com</url>
-	<inceptionYear>20120318</inceptionYear>
+	<inceptionYear>2012</inceptionYear>
 	<organization>
 		<name>Six Dimensions</name>
 		<url>http://www.sixdimensions.com</url>
@@ -138,7 +138,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20090211</version>
+			<version>20080701</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.jcr</groupId>
