@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.sixdimensions.wcm.cq</groupId>
-	<artifactId>cq-package-plugin-site</artifactId>
+	<artifactId>cq-deploy-site</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>CQ Package Plugin</name>
