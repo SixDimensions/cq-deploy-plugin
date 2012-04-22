@@ -68,6 +68,7 @@ install-package
   
   
   <<path>>
+  
   The path to upload the package to. Default is '${project.artifactId}-${project.version}.jar'
   
   

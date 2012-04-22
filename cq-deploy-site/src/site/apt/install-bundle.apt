@@ -43,28 +43,35 @@ install-bundle
   
   
   <<bundleFile>>
+  
   Location of the bundle file. Default is '${project.artifactId}-${project.version}.jar'
 
 
   <<errorOnFailure>>
+  
   Flag to determine whether or not to quit and throw an error when an API call fails. Default is true.
 
   
   <<host>>
+  
   The host of the server to connect to, including protocol. Default is 'http://localhost'.
 
 
   <<password>>
+  
   The password to use when connecting. Default is 'admin'.
 
 
   <<path>>
+  
   The path to upload the package to. Default is '/apps/bundles/install'
 
 
   <<port>>
+  
   The port of the server to connect to. Default is 'admin'.
 
 
   <<user>>
+  
   The username to use when connecting. Default is 'admin'

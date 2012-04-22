@@ -15,6 +15,7 @@ Adobe CQ Deploy Plugin
 * Goals Overview
 
   * {{{./install-package.html}install-package}} installs the package into the CQ Repository.
+  
   * {{{./install-bundle.html}install-bundle}} installs a bundle into the CQ Repository.
 
 * Usage

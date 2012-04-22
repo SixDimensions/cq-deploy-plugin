@@ -17,8 +17,9 @@
 			<item name="Introduction" href="index.html" />
 		</menu>
 		<menu name="Goals">
-			<item name=install-package" href="install-package.html" />
-			<item name=install-bundle" href="install-bundle.html" />
+			<item name="Goals" href="goals.html" />
+			<item name="install-package" href="install-package.html" />
+			<item name="install-bundle" href="install-bundle.html" />
 		</menu>
 		<menu name="Examples">
 			<item name="Sample POM" href="examples/pom.xml" />
