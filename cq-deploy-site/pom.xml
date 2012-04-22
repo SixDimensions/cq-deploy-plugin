@@ -3,17 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.sixdimensions.wcm.cq</groupId>
-	<artifactId>cq-deploy-site</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>cq-deploy-plugin-site</artifactId>
+	<version>0.0.2</version>
 
 	<name>CQ Deploy Plugin Site</name>
-	<url>http://cq-deploy.6dlabs.com/</url>
+	<url>http://cq-deploy-plugin.6dlabs.com/</url>
 	<inceptionYear>2012</inceptionYear>
 
 	<distributionManagement>
 		<site>
-			<id>cq-deploy.6dlabs.com.com</id>
-			<url>scp://www.6dlabs.com/var/www/vhosts/cq-deploy/htdocs/</url>
+			<id>cq-deploy-plugin.6dlabs.com.com</id>
+			<url>scp://www.6dlabs.com/var/www/vhosts/cq-deploy-plugin/htdocs/</url>
 		</site>
 	</distributionManagement>
 
