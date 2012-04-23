@@ -66,8 +66,6 @@ public class HTTPServiceDAO {
 	 * 
 	 * @param url
 	 *            the url to get from
-	 * @param param
-	 *            the parameters to pass to the request
 	 * @return the response from the server
 	 * @throws ParseException
 	 * @throws IOException
@@ -111,8 +109,6 @@ public class HTTPServiceDAO {
 	 * 
 	 * @param url
 	 *            the url to post to
-	 * @param param
-	 *            the parameters to pass to the request
 	 * @return the response from the server
 	 * @throws ParseException
 	 * @throws IOException
