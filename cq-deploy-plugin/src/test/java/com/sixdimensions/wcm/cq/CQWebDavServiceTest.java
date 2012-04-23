@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.sixdimensions.wcm.cq.service.CQService;
 import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
-public class CQJCRServiceTest {
+public class CQWebDavServiceTest {
 
 	private CQService cqSvc;
 	private Log log = new SystemStreamLog();
@@ -44,7 +44,7 @@ public class CQJCRServiceTest {
 		log.info("testUploadFile");
 
 		File f = new File(URLDecoder.decode(getClass().getClassLoader()
-				.getResource("test-bundle-1.0.0.jar").getPath(), "UTF-8"));
+				.getResource("org.apache.servicemix.bundles.commons-csv-1.0-r706900_3.jar").getPath(), "UTF-8"));
 		cqSvc.uploadFile(f, "/apps/bundles/install");
 		log.info("Upload File Complete");
 	}

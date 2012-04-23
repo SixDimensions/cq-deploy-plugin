@@ -22,20 +22,20 @@ import java.io.File;
 
 import org.apache.maven.plugin.logging.Log;
 
-import com.sixdimensions.wcm.cq.dao.JCRDAO;
+import com.sixdimensions.wcm.cq.dao.webdav.WebDavDAO;
 import com.sixdimensions.wcm.cq.service.CQService;
 import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
-public class CQJCRService implements CQService {
+public class CQWebDavService implements CQService {
 
 	private Log log;
 	private CQServiceConfig config;
-	private JCRDAO jcrDAO;
+	private WebDavDAO webDavDAO;
 
-	public CQJCRService(CQServiceConfig config) {
+	public CQWebDavService(CQServiceConfig config) {
 		log = config.getLog();
 		this.config = config;
-		jcrDAO = new JCRDAO(config);
+		webDavDAO = new WebDavDAO(config);
 	}
 
 	/**
@@ -59,19 +59,18 @@ public class CQJCRService implements CQService {
 	public void createFolder(String path) throws Exception {
 		log.debug("createFolder");
 
-		jcrDAO.init();
-		if (!jcrDAO.folderExists(path)) {
+		webDavDAO.init();
+		if (!webDavDAO.folderExists(path)) {
 			String[] parts = path.split("/");
 
 			StringBuffer createPath = new StringBuffer();
 			for (int i = 1; i < parts.length; i++) {
 				createPath.append("/" + parts[i]);
-				if (!jcrDAO.folderExists(createPath.toString())) {
-					jcrDAO.createFolder(createPath.toString());
+				if (!webDavDAO.folderExists(createPath.toString())) {
+					webDavDAO.createFolder(createPath.toString());
 				}
 			}
 		}
-		jcrDAO.shutdown();
 	}
 
 	/*
@@ -82,9 +81,8 @@ public class CQJCRService implements CQService {
 	public void delete(String path) throws Exception {
 		log.debug("delete");
 
-		jcrDAO.init();
-		jcrDAO.delete(path);
-		jcrDAO.shutdown();
+		webDavDAO.init();
+		webDavDAO.delete(path);
 	}
 
 	/*
@@ -101,9 +99,8 @@ public class CQJCRService implements CQService {
 
 		createFolder(path);
 
-		jcrDAO.init();
-		jcrDAO.uploadFile(file, path);
-		jcrDAO.shutdown();
+		webDavDAO.init();
+		webDavDAO.uploadFile(file, path);
 	}
 
 }

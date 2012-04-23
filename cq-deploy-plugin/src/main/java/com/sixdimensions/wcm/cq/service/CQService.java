@@ -20,7 +20,7 @@ package com.sixdimensions.wcm.cq.service;
 
 import java.io.File;
 
-import com.sixdimensions.wcm.cq.service.impl.CQJCRService;
+import com.sixdimensions.wcm.cq.service.impl.CQWebDavService;
 
 /**
  * Service for interacting with CQ over the WebDav protocol. Essentially using
@@ -44,7 +44,7 @@ public interface CQService {
 		 * @return the instance of the Package Manager Service
 		 */
 		public static CQService getService(CQServiceConfig config) {
-			CQService svc = new CQJCRService(config);
+			CQService svc = new CQWebDavService(config);
 			return svc;
 		}
 	}
