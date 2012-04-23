@@ -124,21 +124,26 @@ public class WebDavDAO {
 	}
 
 	/**
-	 * Upload a file to the Sling repository
+	 * Uploads the file into CQ.
 	 * 
-	 * @return the HTTP status code
+	 * @param file
+	 *            The file to upload
+	 * @param path
+	 *            the path to which to upload the file
+	 * @throws IOException
 	 */
 	public void uploadFile(File file, String path) throws IOException {
 		log.debug("uploadFile");
-		String url = config.getHost() + ":" + config.getPort() + path+"/"+file.getName();
+		String url = config.getHost() + ":" + config.getPort() + path + "/"
+				+ file.getName();
 		final PutMethod put = new PutMethod(url);
 
 		put.setRequestEntity(new InputStreamRequestEntity(new FileInputStream(
 				file)));
 		int status = httpClient.executeMethod(put);
-		if(status != 201  && status != 204){
-			throw new IOException("uploadFile(" + url + ") failed, status code="
-					+ status);
+		if (status != 201 && status != 204) {
+			throw new IOException("uploadFile(" + url
+					+ ") failed, status code=" + status);
 		}
 	}
 
