@@ -94,8 +94,14 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 
 		Response response = parseResponse(result);
 		if (!response.isSucceeded() && config.isErrorOnFailure()) {
-			throw new Exception("Failed to delete package, code: "
-					+ response.getCode() + " message: " + response.getMessage());
+			if (path.endsWith(".jar")) {
+				log.warn("Delete failed with jar, trying with zip.");
+				delete(path.replace(".jar", ".zip"));
+			} else {
+				throw new Exception("Failed to delete package, code: "
+						+ response.getCode() + " message: "
+						+ response.getMessage());
+			}
 		}
 	}
 
@@ -128,8 +134,14 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		Response response = parseResponse(result);
 
 		if (!response.isSucceeded() && config.isErrorOnFailure()) {
-			throw new Exception("Failed to install package, code: "
-					+ response.getCode() + " message: " + response.getMessage());
+			if (path.endsWith(".jar")) {
+				log.warn("Install failed with jar, trying with zip.");
+				install(path.replace(".jar", ".zip"));
+			} else {
+				throw new Exception("Failed to install package, code: "
+						+ response.getCode() + " message: "
+						+ response.getMessage());
+			}
 		}
 	}
 
