@@ -82,7 +82,8 @@ public class InstallBundleMojo extends AbstractCQMojo {
 
 			getLog().info("Bundle installation complete");
 		} catch (Exception e) {
-			throw new MojoExecutionException("Exception installing bundle");
+			getLog().error("Exeption installing bundle: "+e.getMessage(),e);
+			throw new MojoExecutionException("Exception installing bundle",e);
 		}
 	}
 
