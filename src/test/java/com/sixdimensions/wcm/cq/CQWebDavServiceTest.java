@@ -15,6 +15,7 @@ public class CQWebDavServiceTest {
 
 	private CQService cqSvc;
 	private Log log = new SystemStreamLog();
+	private boolean executeTests = true;
 
 	@Before
 	public void init() {
@@ -28,6 +29,15 @@ public class CQWebDavServiceTest {
 		config.setLog(log);
 
 		cqSvc = CQService.Factory.getService(config);
+
+		log.debug("Verifying authentication");
+		try {
+			cqSvc.createFolder("/apps");
+		} catch (Exception e) {
+			log.warn("Authentication failed, skipping tests");
+			executeTests = false;
+		}
+
 		log.info("Init Complete");
 	}
 
@@ -35,7 +45,9 @@ public class CQWebDavServiceTest {
 	public void testCreateFolder() throws Exception {
 		log.info("testCreateFolder");
 
-		cqSvc.createFolder("/apps/bundles/install");
+		if (executeTests) {
+			cqSvc.createFolder("/apps/bundles/install");
+		}
 		log.info("Create Folder Complete");
 	}
 
@@ -43,9 +55,16 @@ public class CQWebDavServiceTest {
 	public void testUploadFile() throws Exception {
 		log.info("testUploadFile");
 
-		File f = new File(URLDecoder.decode(getClass().getClassLoader()
-				.getResource("org.apache.servicemix.bundles.commons-csv-1.0-r706900_3.jar").getPath(), "UTF-8"));
-		cqSvc.uploadFile(f, "/apps/bundles/install");
+		if (executeTests) {
+			File f = new File(
+					URLDecoder
+							.decode(getClass()
+									.getClassLoader()
+									.getResource(
+											"org.apache.servicemix.bundles.commons-csv-1.0-r706900_3.jar")
+									.getPath(), "UTF-8"));
+			cqSvc.uploadFile(f, "/apps/bundles/install");
+		}
 		log.info("Upload File Complete");
 	}
 
@@ -53,7 +72,9 @@ public class CQWebDavServiceTest {
 	public void testDeleteFile() throws Exception {
 		log.info("testDeleteFile");
 
-		cqSvc.delete("/apps/bundles/install/test-bundle-1.0.0.jar");
+		if (executeTests) {
+			cqSvc.delete("/apps/bundles/install/test-bundle-1.0.0.jar");
+		}
 
 		log.info("Delete File Complete");
 	}

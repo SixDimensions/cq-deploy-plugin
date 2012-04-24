@@ -10,15 +10,16 @@ import org.junit.Test;
 
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
+import com.sixdimensions.wcm.cq.service.CQService;
 
 public class PackageManagerServiceImplTest {
 
-	
 	private PackageManagerService packageManagerSvc;
 	private Log log = new SystemStreamLog();
-	
+	private boolean executeTests;
+
 	@Before
-	public void init(){
+	public void init() {
 		log.info("Init");
 
 		PackageManagerConfig config = new PackageManagerConfig();
@@ -29,39 +30,56 @@ public class PackageManagerServiceImplTest {
 		config.setPassword("admin");
 		config.setErrorOnFailure(false);
 		config.setLog(log);
-		
-		packageManagerSvc = 
-				PackageManagerService.Factory.getPackageMgr(config);
+
+		packageManagerSvc = PackageManagerService.Factory.getPackageMgr(config);
+
+		log.debug("Verifying authentication");
+		CQService cqSvc = CQService.Factory.getService(config);
+		try {
+			cqSvc.createFolder("/apps");
+		} catch (Exception e) {
+			log.warn("Authentication failed, skipping tests");
+			executeTests = false;
+		}
+
 		log.info("Init Complete");
 	}
 
 	@Test
-	public void testUpload() throws Exception{
+	public void testUpload() throws Exception {
 		log.info("Testing Upload");
-		File f = new File(URLDecoder.decode(getClass().getClassLoader()
-				.getResource("test-1.0.0.zip").getPath(), "UTF-8"));
-		packageManagerSvc.upload("test/test-1.0.0.zip",f);
+		if (executeTests) {
+			File f = new File(URLDecoder.decode(getClass().getClassLoader()
+					.getResource("test-1.0.0.zip").getPath(), "UTF-8"));
+			packageManagerSvc.upload("test/test-1.0.0.zip", f);
+		}
 		log.info("Test Successful");
 	}
-	
+
 	@Test
-	public void testDryRun() throws Exception{
+	public void testDryRun() throws Exception {
 		log.info("Testing Dry Run");
-		packageManagerSvc.dryRun("test/test-1.0.0.zip");
+		if (executeTests) {
+			packageManagerSvc.dryRun("test/test-1.0.0.zip");
+		}
 		log.info("Test Successful");
 	}
-	
+
 	@Test
-	public void testInstall() throws Exception{
+	public void testInstall() throws Exception {
 		log.info("Testing Install");
-		packageManagerSvc.install("test/test-1.0.0.zip");
+		if (executeTests) {
+			packageManagerSvc.install("test/test-1.0.0.zip");
+		}
 		log.info("Test Successful");
 	}
-	
+
 	@Test
-	public void testDelete() throws Exception{
+	public void testDelete() throws Exception {
 		log.info("Testing Delete");
-		packageManagerSvc.delete("test/test-1.0.0.zip");
+		if (executeTests) {
+			packageManagerSvc.delete("test/test-1.0.0.zip");
+		}
 		log.info("Test Successful");
 	}
 }
