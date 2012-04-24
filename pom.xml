@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>com.sixdimensions.wcm.cq</groupId>
 	<artifactId>cq-deploy-plugin</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>Adobe CQ Deploy Maven Plugin</name>
