@@ -31,8 +31,8 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/tags/cq-deploy-plugin-0.0.4</url>
-		<connection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/tags/cq-deploy-plugin-0.0.4</connection>
+		<url>http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/trunk/cq-deploy-plugin/</url>
+		<connection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/trunk/cq-deploy-plugin/</connection>
 	</scm>
 
 	<properties>
