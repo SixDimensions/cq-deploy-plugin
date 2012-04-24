@@ -114,8 +114,13 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		}
 
 		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
-			throw new Exception("Failed to delete package: "
-					+ result.getString(MESSAGE_KEY));
+			if (path.endsWith(".jar")) {
+				log.warn("Delete failed with jar, trying with zip.");
+				delete(path.replace(".jar", ".zip"));
+			} else {
+				throw new Exception("Failed to complete delete: "
+						+ result.getString(MESSAGE_KEY));
+			}
 		}
 	}
 
@@ -145,8 +150,13 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		}
 
 		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
-			throw new Exception("Failed to complete installation dry run: "
-					+ result.getString(MESSAGE_KEY));
+			if (path.endsWith(".jar")) {
+				log.warn("Dry run failed with jar, trying with zip.");
+				dryRun(path.replace(".jar", ".zip"));
+			} else {
+				throw new Exception("Failed to complete installation dry run: "
+						+ result.getString(MESSAGE_KEY));
+			}
 		}
 	}
 
@@ -176,8 +186,13 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		}
 
 		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
-			throw new Exception("Failed to complete installation dry run: "
-					+ result.getString(MESSAGE_KEY));
+			if (path.endsWith(".jar")) {
+				log.warn("Installation failed with jar, trying with zip.");
+				install(path.replace(".jar", ".zip"));
+			} else {
+				throw new Exception("Failed to complete installation: "
+						+ result.getString(MESSAGE_KEY));
+			}
 		}
 	}
 
