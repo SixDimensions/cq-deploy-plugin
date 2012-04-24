@@ -186,7 +186,14 @@ public class HTTPServiceDAO {
 			HttpEntity resEntity = response.getEntity();
 
 			log.debug("Recieving response");
-			return EntityUtils.toByteArray(resEntity);
+			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
+				return EntityUtils.toByteArray(resEntity);
+			} else {
+				log.debug(EntityUtils.toString(resEntity));
+				throw new IOException("Invalid response: "
+						+ response.getStatusLine().getStatusCode() + " "
+						+ response.getStatusLine().getReasonPhrase());
+			}
 		} finally {
 			try {
 				httpclient.getConnectionManager().shutdown();
