@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
+import com.sixdimensions.wcm.cq.service.CQService;
 
 public class LegacyPackageManagerServiceImplTest {
 
@@ -33,6 +34,15 @@ public class LegacyPackageManagerServiceImplTest {
 		config.setErrorOnFailure(true);
 		config.setLog(log);
 
+		log.debug("Verifying authentication");
+		CQService cqSvc = CQService.Factory.getService(config);
+		try {
+			cqSvc.createFolder("/apps");
+		} catch (Exception e) {
+			log.warn("Authentication failed, skipping tests");
+			executeTests = false;
+		}
+
 		packageManagerSvc = PackageManagerService.Factory.getPackageMgr(config);
 		log.info("Init Complete");
 	}
@@ -40,24 +50,17 @@ public class LegacyPackageManagerServiceImplTest {
 	@Test
 	public void testUpload() throws Exception {
 		log.info("Testing Upload");
-		try {
+		if (executeTests) {
 			File f = new File(URLDecoder.decode(getClass().getClassLoader()
 					.getResource("test-1.0.0.zip").getPath(), "UTF-8"));
 			packageManagerSvc.upload("test/test", f);
-		} catch (IOException e) {
-			if (e.getMessage().equals("Invalid response: 401 Unauthorized")) {
-				log.warn("Unable to aunthenticate, skipping tests");
-				executeTests = false;
-			} else {
-				throw e;
-			}
 		}
 	}
 
 	@Test
 	public void testInstall() throws Exception {
 		log.info("Testing Install");
-		try {
+		if (executeTests) {
 			try {
 				packageManagerSvc.install("my_packages/does-not-exist.zip");
 				fail("Exception expected");
@@ -65,14 +68,6 @@ public class LegacyPackageManagerServiceImplTest {
 				log.info("Exception caught as expected");
 			}
 			packageManagerSvc.install("test/test");
-
-		} catch (IOException e) {
-			if (e.getMessage().equals("Invalid response: 401 Unauthorized")) {
-				log.warn("Unable to aunthenticate, skipping tests");
-				executeTests = false;
-			} else {
-				throw e;
-			}
 		}
 	}
 
