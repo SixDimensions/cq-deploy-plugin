@@ -114,9 +114,7 @@ public class WebDavDAO {
 	public boolean folderExists(String path) throws HttpException, IOException {
 		log.debug("folderExists");
 		int status = 0;
-		if (!path.endsWith("/")) {
-			path += "/";
-		}
+		path += ".json";
 		String url = config.getHost() + ":" + config.getPort() + path;
 		log.debug("Checking URL: " + url);
 		status = httpClient.executeMethod(new GetMethod(url));
