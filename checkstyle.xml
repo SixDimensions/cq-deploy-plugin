@@ -39,8 +39,9 @@
 	</module>
 
 	<module name="RegexpSingleline">
+		<property name="severity" value="info" />
 		<!-- \s matches whitespace character, $ matches end of line. -->
-		<property name="format" value="\s+$" />
+		<property name="format" value="^(?!.+\*.+).+\s+$" />
 		<property name="message" value="Line has trailing spaces." />
 	</module>
 
