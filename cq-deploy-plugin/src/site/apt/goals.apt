@@ -1,0 +1,17 @@
+ ------
+ Goals
+ ------
+ Dan Klco
+ ------
+ 2012-04-22
+ ------
+
+Goals
+
+ This plugin is used to upload and install code and content into a CQ repository.
+
+*Available Goals
+
+  * {{{./install-package.html}install-package}} installs the package into the CQ Repository.
+  
+  * {{{./install-bundle.html}install-bundle}} installs a bundle into the CQ Repository.
