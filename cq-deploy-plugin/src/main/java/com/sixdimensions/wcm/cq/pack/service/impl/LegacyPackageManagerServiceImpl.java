@@ -1,3 +1,21 @@
+/*
+ * Copyright 2012 - Six Dimensions
+ * 
+ * This file is part of the CQ Package Plugin.
+ * 
+ * The CQ Package Plugin is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * The CQ Package Plugin is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the CQ Package Plugin.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.sixdimensions.wcm.cq.pack.service.impl;
 
 import java.io.ByteArrayInputStream;
@@ -12,6 +30,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.maven.plugin.logging.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -21,17 +40,44 @@ import com.sixdimensions.wcm.cq.dao.HTTPServiceDAO;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
+/**
+ * Implementation of the Package Manager Service that uses the Legacy API.
+ * Useful for CQ < 5.2.
+ * 
+ * @author dklco
+ */
 public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 
+	/**
+	 * Eunmeration of the various commands for the Legacy Package Manager
+	 * Service.
+	 * 
+	 * @author dklco
+	 */
 	private static enum COMMAND {
 		DELETE("rm"), INSTALL("inst"), UPLOAD("upload");
 
+		/**
+		 * The internal command string
+		 */
 		private final String cmd;
 
+		/**
+		 * Construct a new COMMAND with the specified string
+		 * 
+		 * @param cmd
+		 *            the string representation of the command for this COMMAND
+		 *            instance
+		 */
 		COMMAND(String cmd) {
 			this.cmd = cmd;
 		}
 
+		/**
+		 * Gets the command string to pass to the service.
+		 * 
+		 * @return the service command string
+		 */
 		public String getCmd() {
 			return cmd;
 		}
@@ -42,7 +88,6 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	private static final String GROUP_KEY = "&group=";
 	private static final String NAME_KEY = "&name=";
 	private static final String SERVICE_PATH = "/crx/packmgr/service.jsp";
-	private static final String SUCCESS_KEY = "200";
 	private PackageManagerConfig config;
 	private Log log;
 	private HTTPServiceDAO pmAPI;
@@ -182,8 +227,15 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 
 		log.debug("Parsing response code");
 		XPathExpression codeXpr = xpath.compile("/crx/response/status/@code");
-		String responseCode = ((NodeList) codeXpr.evaluate(doc,
-				XPathConstants.NODESET)).item(0).getNodeValue();
+		int responseCode = -1;
+		try {
+			responseCode = Integer.parseInt(((NodeList) codeXpr.evaluate(doc,
+					XPathConstants.NODESET)).item(0).getNodeValue(), 10);
+		} catch (NumberFormatException nfe) {
+			log.warn("Unable to parse "
+					+ ((NodeList) codeXpr.evaluate(doc, XPathConstants.NODESET))
+							.item(0).getNodeValue() + " as a number");
+		}
 
 		log.debug("Parsing response message");
 		XPathExpression messageXpr = xpath.compile("/crx/response/status");
@@ -191,10 +243,10 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 				XPathConstants.NODESET)).item(0).getChildNodes().item(0)
 				.getNodeValue();
 
-		Response responseObj = new Response(SUCCESS_KEY.equals(responseCode),
+		Response responseObj = new Response(HttpStatus.SC_OK == responseCode,
 				responseCode, responseMessage);
 		log.debug("Response Code: " + responseCode);
-		if (SUCCESS_KEY.equals(responseCode)) {
+		if (HttpStatus.SC_OK == responseCode) {
 			log.debug("Response Message: " + responseMessage);
 		} else {
 			log.warn("Error Message: " + responseMessage);
@@ -235,7 +287,7 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
  * @author klcodanr
  */
 class Response {
-	private String code;
+	private int code;
 	private String message;
 	boolean succeeded;
 
@@ -251,13 +303,13 @@ class Response {
 	 *            the message returned by the server usually either 'ok' or some
 	 *            sort of error
 	 */
-	protected Response(boolean succeeded, String code, String message) {
+	protected Response(boolean succeeded, int code, String message) {
 		this.succeeded = succeeded;
 		this.code = code;
 		this.message = message;
 	}
 
-	public String getCode() {
+	public int getCode() {
 		return code;
 	}
 
