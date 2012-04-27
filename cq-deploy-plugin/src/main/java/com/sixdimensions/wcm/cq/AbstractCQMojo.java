@@ -66,6 +66,22 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 */
 	protected String user;
 
+	public String getHost() {
+		return host;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getPort() {
+		return port;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
 	/**
 	 * Initialized the configuration object with the values passed in through
 	 * the Maven configuration.
@@ -82,5 +98,29 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 		config.setPassword(password);
 		config.setPort(port);
 		config.setUser(user);
+	}
+
+	public boolean isErrorOnFailure() {
+		return errorOnFailure;
+	}
+
+	public void setErrorOnFailure(boolean errorOnFailure) {
+		this.errorOnFailure = errorOnFailure;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setPort(String port) {
+		this.port = port;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
 	}
 }
