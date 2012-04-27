@@ -120,4 +120,44 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 		}
 		getLog().info("Package Upload/Installation Completed Successfully");
 	}
+
+	public File getPackageFile() {
+		return packageFile;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public boolean isDeleteFirst() {
+		return deleteFirst;
+	}
+
+	public boolean isUploadOnly() {
+		return uploadOnly;
+	}
+
+	public boolean isUseLegacy() {
+		return useLegacy;
+	}
+
+	public void setDeleteFirst(boolean deleteFirst) {
+		this.deleteFirst = deleteFirst;
+	}
+
+	public void setPackageFile(File packageFile) {
+		this.packageFile = packageFile;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public void setUploadOnly(boolean uploadOnly) {
+		this.uploadOnly = uploadOnly;
+	}
+
+	public void setUseLegacy(boolean useLegacy) {
+		this.useLegacy = useLegacy;
+	}
 }

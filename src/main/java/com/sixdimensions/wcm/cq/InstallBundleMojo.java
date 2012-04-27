@@ -87,4 +87,20 @@ public class InstallBundleMojo extends AbstractCQMojo {
 		}
 	}
 
+	public File getBundleFile() {
+		return bundleFile;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setBundleFile(File bundleFile) {
+		this.bundleFile = bundleFile;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 }
