@@ -139,7 +139,7 @@ public class WebDavDAO {
 		put.setRequestEntity(new InputStreamRequestEntity(new FileInputStream(
 				file)));
 		int status = httpClient.executeMethod(put);
-		if (status != 201 && status != 204) {
+		if (status != 200 && status != 201 && status != 204) {
 			throw new IOException("uploadFile(" + url
 					+ ") failed, status code=" + status);
 		}
