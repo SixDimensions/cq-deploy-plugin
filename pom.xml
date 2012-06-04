@@ -35,6 +35,13 @@
 		<developerConnection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/trunk/cq-deploy-plugin</developerConnection>
 		<connection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/trunk/cq-deploy-plugin</connection>
 	</scm>
+	
+	<distributionManagement>
+		<site>
+			<id>cq-deploy-plugin.6dlabs.com.com</id>
+			<url>scp://www.6dlabs.com/var/www/vhosts/cq-deploy-plugin/htdocs/</url>
+		</site>
+	</distributionManagement>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
