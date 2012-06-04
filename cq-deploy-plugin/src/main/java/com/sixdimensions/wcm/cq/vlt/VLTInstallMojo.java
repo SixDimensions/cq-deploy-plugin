@@ -61,7 +61,6 @@ public class VLTInstallMojo extends AbstractCQMojo {
 	protected void initConfig(CQServiceConfig cfg) {
 		super.initConfig(cfg);
 		CQVLTServiceConfig config = (CQVLTServiceConfig) cfg;
-		config.setPaths(paths);
 		config.setRoot(root);
 		config.setVltExe(vltExe);
 	}
