@@ -52,7 +52,7 @@
 		<fluidoSkin>
 			<sideBarEnabled>true</sideBarEnabled>
 			<googleSearch>
-				<sitesearch />
+				<sitesearch>cq-deploy-plugin.6dlabs.com</sitesearch>
 			</googleSearch>
 		</fluidoSkin>
 
