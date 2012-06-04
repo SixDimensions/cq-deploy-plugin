@@ -7,7 +7,7 @@
 	</parent>
 	<groupId>com.sixdimensions.wcm.cq</groupId>
 	<artifactId>cq-deploy-plugin</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>Adobe CQ Deploy Maven Plugin</name>
@@ -31,9 +31,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/branches/cq-deploy-plugin-0.1.1</url>
-		<developerConnection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/branches/cq-deploy-plugin-0.1.1</developerConnection>
-		<connection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/branches/cq-deploy-plugin-0.1.1</connection>
+		<url>http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/tags/cq-deploy-plugin-0.1.1</url>
+		<developerConnection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/tags/cq-deploy-plugin-0.1.1</developerConnection>
+		<connection>scm:svn:http://sourcecontrol.6dlabs.com/svn/sandbox/cq-deploy-plugin/tags/cq-deploy-plugin-0.1.1</connection>
 	</scm>
 
 	<properties>
