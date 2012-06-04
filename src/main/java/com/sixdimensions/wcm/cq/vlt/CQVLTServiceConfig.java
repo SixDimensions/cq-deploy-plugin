@@ -30,11 +30,6 @@ import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 public class CQVLTServiceConfig extends CQServiceConfig {
 
 	/**
-	 * The paths of the folders to be imported into CQ.
-	 */
-	private String[] paths;
-
-	/**
 	 * Root of the files for VLT to act upon.
 	 */
 	private String root;
@@ -43,16 +38,6 @@ public class CQVLTServiceConfig extends CQServiceConfig {
 	 * A file reference to the VLT Executable.
 	 */
 	private File vltExe;
-
-	/**
-	 * Get the list of paths, used to know which files to act upon and to
-	 * generate a filter.xml.
-	 * 
-	 * @return the array of paths
-	 */
-	public String[] getPaths() {
-		return paths;
-	}
 
 	/**
 	 * The root of the files for VLT to act upon, relative to the project root.
@@ -73,16 +58,6 @@ public class CQVLTServiceConfig extends CQServiceConfig {
 	}
 
 	/**
-	 * Set the paths used to determine what files are to be affected and used to
-	 * generate the filter.xml,
-	 * 
-	 * @param paths
-	 */
-	public void setPaths(String[] paths) {
-		this.paths = paths;
-	}
-
-	/**
 	 * Set the root of the files for VLT to act upon, relative to the project
 	 * root.
 	 * 
@@ -92,6 +67,12 @@ public class CQVLTServiceConfig extends CQServiceConfig {
 		this.root = root;
 	}
 
+	/**
+	 * Sets the VLT Executable file.
+	 * 
+	 * @param vltExe
+	 *            a reference to the VLT executable
+	 */
 	public void setVltExe(File vltExe) {
 		this.vltExe = vltExe;
 	}
