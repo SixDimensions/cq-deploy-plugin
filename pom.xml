@@ -12,7 +12,7 @@
 
 	<name>Adobe CQ Deploy Maven Plugin</name>
 	<description>Maven plugin for automating code deployments to Adobe CQ.</description>
-	<url>http://cq-deploy.6dlabs.com</url>
+	<url>http://cq-deploy-plugin.6dlabs.com</url>
 	<inceptionYear>2012</inceptionYear>
 	<organization>
 		<name>Six Dimensions</name>
