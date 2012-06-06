@@ -1,0 +1,14 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:description="Template for Academy of Art University pages"
+    jcr:primaryType="cq:Template"
+    jcr:title="Academy of Art University Generic Page"
+    allowedPaths="[/content(?!/${parentArtifactId}/[${symbol_escape}${symbol_escape}w${symbol_escape}${symbol_escape}-]+).*]"
+    ranking="{Long}90">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="${parentArtifactId}/components/pages/base"/>
+</jcr:root>
