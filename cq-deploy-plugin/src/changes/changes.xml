@@ -9,6 +9,12 @@
 			<action dev="Dan Klco" type="fix">
 				Fixed issue where creating folders triggered error in CQ 5.5.
 			</action>
+			<action dev="Dan Klco" type="fix">
+				Incorporated the site information into the main project.
+			</action>
+			<action dev="Dan Klco" type="add">
+				Added Maven site 
+			</action>
 		</release>
 		<release version="0.0.4" date="2012-04-24" description="Initial Release to Maven Central">
 			<action dev="Dan Klco" type="add">
