@@ -1,0 +1,33 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root 
+	xmlns:cq="http://www.day.com/jcr/cq/1.0" 
+	xmlns:jcr="http://www.jcp.org/jcr/1.0"
+	jcr:primaryType="cq:TabPanel" 
+	activeTab="{Long}0" 
+	xtype="tabpanel">
+	<items 
+		jcr:primaryType="cq:WidgetCollection">
+		<tab1 
+			jcr:primaryType="cq:Widget" 
+			anchor="100%"
+			title="Configure Accordian" 
+			xtype="panel">
+			<items 
+				jcr:primaryType="cq:WidgetCollection">
+				<title
+            		jcr:primaryType="cq:Widget"
+            		fieldLabel="Title"
+	            	name="./title"
+            		type="textfield"/>
+				<description
+            		jcr:primaryType="cq:Widget"
+            		fieldLabel="Description"
+	            	name="./description"
+            		type="richtext"/>
+			</items>
+		</tab1>
+	</items>
+</jcr:root>
