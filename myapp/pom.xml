@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mycompany</groupId>
+	<artifactId>myapp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>My App</name>
+	<description>My App</description>
+	
+	<modules>
+		<module>myapp-bundle</module>
+		<module>myapp-vault</module>
+		<module>myapp-package</module>
+	</modules>
+
+	<repositories>
+		<repository>
+			<id>adobe-repo</id>
+			<url>http://repo.adobe.com/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<profile>
+			<id>default-profile</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<cq.host>http://localhost</cq.host>
+				<cq.port>4502</cq.port>
+				<cq.user>admin</cq.user>
+				<cq.password>admin</cq.password>
+			</properties>
+		</profile>
+	</profiles>
+</project>
