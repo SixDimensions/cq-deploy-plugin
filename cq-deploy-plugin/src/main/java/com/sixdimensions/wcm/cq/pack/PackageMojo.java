@@ -166,12 +166,22 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.sixdimensions.wcm.cq.AbstractCQMojo#initConfig(com.sixdimensions.wcm.cq.service.CQServiceConfig)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.AbstractCQMojo#initConfig(com.sixdimensions.
+	 * wcm.cq.service.CQServiceConfig)
 	 */
 	protected void initConfig(CQServiceConfig cfg) {
 		super.initConfig(cfg);
 		PackageManagerConfig config = (PackageManagerConfig) cfg;
-		config.setAcHandling(AC_HANDLING.valueOf(this.getAcHandling()));
+		try {
+			config.setAcHandling(AC_HANDLING.valueOf(this.getAcHandling()));
+		} catch (IllegalArgumentException iae) {
+			getLog().info(
+					"Unable to parse Access Control Handler from: "
+							+ this.getAcHandling() + " using default");
+			config.setAcHandling(AC_HANDLING.DEFAULT);
+		}
 		config.setRecursive(this.isRecursive());
 		config.setAutosave(this.getAutosave());
 	}
