@@ -24,8 +24,10 @@ import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
 import com.sixdimensions.wcm.cq.AbstractCQMojo;
+import com.sixdimensions.wcm.cq.pack.service.AC_HANDLING;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
+import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
 /**
  * Goal which uploads and installs a package to Adobe CQ.
@@ -35,6 +37,23 @@ import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
  * @phase install
  */
 public class PackageMojo extends AbstractCQMojo implements Mojo {
+
+	/**
+	 * Sets handing of access control information. Valid options are: clear,
+	 * ignore, merge, merge_preserve or overwrite. Not applicable for the legacy
+	 * package manager.
+	 * 
+	 * @parameter default-value=
+	 */
+	private String acHandling = "";
+
+	/**
+	 * Save interval value. When this number of nodes are updated, they will be
+	 * automatically saved. Not applicable for the legacy package manager.
+	 * 
+	 * @parameter default-value=1024
+	 */
+	private int autosave = 1024;
 
 	/**
 	 * Flag to determine whether or not to first delete the package before
@@ -61,6 +80,14 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 	 *            "${project.artifactId}-${project.version}.${project.packaging}"
 	 */
 	private String path;
+
+	/**
+	 * Sets the recursive flag, if true will load and install any packages
+	 * inside this package. Not applicable for the legacy package manager.
+	 * 
+	 * @parameter default-value=true
+	 */
+	private boolean recursive = true;
 
 	/**
 	 * Flag to determine whether or not to only upload and not install the
@@ -121,6 +148,14 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 		getLog().info("Package Upload/Installation Completed Successfully");
 	}
 
+	public String getAcHandling() {
+		return acHandling;
+	}
+
+	public int getAutosave() {
+		return autosave;
+	}
+
 	public File getPackageFile() {
 		return packageFile;
 	}
@@ -129,8 +164,24 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 		return path;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.sixdimensions.wcm.cq.AbstractCQMojo#initConfig(com.sixdimensions.wcm.cq.service.CQServiceConfig)
+	 */
+	protected void initConfig(CQServiceConfig cfg) {
+		super.initConfig(cfg);
+		PackageManagerConfig config = (PackageManagerConfig) cfg;
+		config.setAcHandling(AC_HANDLING.valueOf(this.getAcHandling()));
+		config.setRecursive(this.isRecursive());
+		config.setAutosave(this.getAutosave());
+	}
+
 	public boolean isDeleteFirst() {
 		return deleteFirst;
+	}
+
+	public boolean isRecursive() {
+		return recursive;
 	}
 
 	public boolean isUploadOnly() {
@@ -139,6 +190,14 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 
 	public boolean isUseLegacy() {
 		return useLegacy;
+	}
+
+	public void setAcHandling(String acHandling) {
+		this.acHandling = acHandling;
+	}
+
+	public void setAutosave(int autosave) {
+		this.autosave = autosave;
 	}
 
 	public void setDeleteFirst(boolean deleteFirst) {
@@ -151,6 +210,10 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	public void setRecursive(boolean recursive) {
+		this.recursive = recursive;
 	}
 
 	public void setUploadOnly(boolean uploadOnly) {
