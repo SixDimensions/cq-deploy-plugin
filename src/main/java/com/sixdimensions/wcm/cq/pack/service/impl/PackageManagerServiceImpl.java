@@ -24,6 +24,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.json.JSONObject;
 
 import com.sixdimensions.wcm.cq.dao.HTTPServiceDAO;
+import com.sixdimensions.wcm.cq.pack.service.AC_HANDLING;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 
@@ -48,6 +49,9 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 		}
 	}
 
+	private static final String PARAM_AC_HANDLING = "acHandling";
+	private static final String PARAM_AUTOSAVE = "autosave";
+	private static final String PARAM_RECURSIVE = "recursive";
 	private static final String FILE_KEY = "package";
 	private static final String MESSAGE_KEY = "msg";
 	private static final String PACK_MGR_PATH = "/crx/packmgr/service/.json";
@@ -172,7 +176,7 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 
 		log.info("Installing package at path: " + path);
 		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
-				+ COMMAND.INSTALL.getCmd()), "UTF-8");
+				+ COMMAND.INSTALL.getCmd() + getInstallParameters()), "UTF-8");
 		log.debug("Response: " + responseStr);
 
 		JSONObject result = new JSONObject(responseStr);
@@ -194,6 +198,21 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 						+ result.getString(MESSAGE_KEY));
 			}
 		}
+	}
+
+	/**
+	 * Creates a String representation of the extended installation parameters
+	 * 
+	 * @return the extended installation parameters
+	 */
+	private String getInstallParameters() {
+		log.debug("getInstallParameters");
+		String paramStr = "&" + PARAM_AUTOSAVE + "=" + config.getAutosave();
+		paramStr += "&" + PARAM_AC_HANDLING + "="
+				+ config.getAcHandling().getValue();
+		paramStr += "&" + PARAM_RECURSIVE + "=" + config.isRecursive();
+		log.debug("Retrieved parameters: " + paramStr);
+		return paramStr;
 	}
 
 	/*

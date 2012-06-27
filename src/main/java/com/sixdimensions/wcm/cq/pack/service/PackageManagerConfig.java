@@ -28,10 +28,37 @@ import com.sixdimensions.wcm.cq.service.CQServiceConfig;
  */
 public class PackageManagerConfig extends CQServiceConfig {
 
+	private AC_HANDLING acHandling =  AC_HANDLING.DEFAULT;
+	private int autosave = 1024;
+	private boolean recursive = true;
 	private boolean useLegacy = false;
+
+	public AC_HANDLING getAcHandling() {
+		return acHandling;
+	}
+
+	public int getAutosave() {
+		return autosave;
+	}
+
+	public boolean isRecursive() {
+		return recursive;
+	}
 
 	public boolean isUseLegacy() {
 		return useLegacy;
+	}
+
+	public void setAcHandling(AC_HANDLING acHandling) {
+		this.acHandling = acHandling;
+	}
+
+	public void setAutosave(int autosave) {
+		this.autosave = autosave;
+	}
+
+	public void setRecursive(boolean recursive) {
+		this.recursive = recursive;
 	}
 
 	public void setUseLegacy(boolean useLegacy) {
