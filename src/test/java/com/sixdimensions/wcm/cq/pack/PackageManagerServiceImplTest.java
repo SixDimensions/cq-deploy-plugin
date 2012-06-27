@@ -19,6 +19,73 @@ public class PackageManagerServiceImplTest {
 	private Log log = new SystemStreamLog();
 	private PackageManagerService packageManagerSvc;
 
+	@Test
+	public void atestUpload() throws Exception {
+		log.info("Testing Upload");
+		if (executeTests) {
+			File f = new File(URLDecoder.decode(getClass().getClassLoader()
+					.getResource("test-1.0.0.zip").getPath(), "UTF-8"));
+			packageManagerSvc.upload("test/test-1.0.0.zip", f);
+		}
+		log.info("Test Successful");
+	}
+
+
+	@Test
+	public void btestDryRun() throws Exception {
+		log.info("Testing Dry Run");
+		if (executeTests) {
+			packageManagerSvc.dryRun("test/test-1.0.0.zip");
+		}
+		log.info("Test Successful");
+	}
+
+	@Test
+	public void ctestInstall() throws Exception {
+		log.info("Testing Install");
+		if (executeTests) {
+			packageManagerSvc.install("test/test-1.0.0.zip");
+		}
+
+		log.info("Test Successful");
+	}
+	
+	@Test
+	public void dtestDelete() throws Exception {
+		log.info("Testing Delete");
+		if (executeTests) {
+			packageManagerSvc.delete("test/test-1.0.0.zip");
+		}
+		log.info("Test Successful");
+	}
+
+	@Test
+	public void etestFailures() throws Exception {
+		log.info("Testing failures");
+		if (executeTests) {
+			String[] failures = new String[] { "test-bad-zip.zip",
+					"test-not-package.zip", "test-bad-file.zip" };
+			for (String failure : failures) {
+				try {
+					log.info("Testing " + failure);
+					File f = new File(URLDecoder.decode(getClass()
+							.getClassLoader().getResource(failure).getPath(),
+							"UTF-8"));
+					packageManagerSvc.upload("test/" + failure, f);
+					packageManagerSvc.install(failure);
+				} catch (Exception e) {
+					try{
+						packageManagerSvc.delete(failure);
+					}catch(Exception ee){
+						log.debug("Caught exception deleting test failure package: "+ee);
+					}
+					log.error(e);
+				}
+			}
+		}
+		log.info("Test Successful");
+	}
+	
 	@Before
 	public void init() {
 		log.info("Init");
@@ -46,73 +113,6 @@ public class PackageManagerServiceImplTest {
 		}
 
 		log.info("Init Complete");
-	}
-
-
-	@Test
-	public void testFailures() throws Exception {
-		log.info("Testing failures");
-		if (executeTests) {
-			String[] failures = new String[] { "test-bad-zip.zip",
-					"test-not-package.zip", "test-bad-file.zip" };
-			for (String failure : failures) {
-				try {
-					log.info("Testing " + failure);
-					File f = new File(URLDecoder.decode(getClass()
-							.getClassLoader().getResource(failure).getPath(),
-							"UTF-8"));
-					packageManagerSvc.upload("test/" + failure, f);
-					packageManagerSvc.install(failure);
-				} catch (Exception e) {
-					try{
-						packageManagerSvc.delete(failure);
-					}catch(Exception ee){
-						log.debug("Caught exception deleting test failure package: "+ee);
-					}
-					log.error(e);
-				}
-			}
-		}
-		log.info("Test Successful");
-	}
-
-	@Test
-	public void testUpload() throws Exception {
-		log.info("Testing Upload");
-		if (executeTests) {
-			File f = new File(URLDecoder.decode(getClass().getClassLoader()
-					.getResource("test-1.0.0.zip").getPath(), "UTF-8"));
-			packageManagerSvc.upload("test/test-1.0.0.zip", f);
-		}
-		log.info("Test Successful");
-	}
-	
-	@Test
-	public void testDryRun() throws Exception {
-		log.info("Testing Dry Run");
-		if (executeTests) {
-			packageManagerSvc.dryRun("test/test-1.0.0.zip");
-		}
-		log.info("Test Successful");
-	}
-
-	@Test
-	public void testInstall() throws Exception {
-		log.info("Testing Install");
-		if (executeTests) {
-			packageManagerSvc.install("test/test-1.0.0.zip");
-		}
-
-		log.info("Test Successful");
-	}
-	
-	@Test
-	public void testDelete() throws Exception {
-		log.info("Testing Delete");
-		if (executeTests) {
-			packageManagerSvc.delete("test/test-1.0.0.zip");
-		}
-		log.info("Test Successful");
 	}
 
 }
