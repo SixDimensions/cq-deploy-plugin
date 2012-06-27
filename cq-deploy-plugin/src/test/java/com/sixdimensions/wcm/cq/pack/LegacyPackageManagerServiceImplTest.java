@@ -11,6 +11,7 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sixdimensions.wcm.cq.pack.service.AC_HANDLING;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 import com.sixdimensions.wcm.cq.service.CQService;
@@ -33,6 +34,7 @@ public class LegacyPackageManagerServiceImplTest {
 		config.setPassword("admin");
 		config.setErrorOnFailure(true);
 		config.setLog(log);
+		config.setAcHandling(AC_HANDLING.valueOf("ignore"));
 
 		log.debug("Verifying authentication");
 		CQService cqSvc = CQService.Factory.getService(config);
@@ -82,6 +84,28 @@ public class LegacyPackageManagerServiceImplTest {
 				log.info("Exception caught as expected");
 			}
 		}
+	}
+
+	@Test
+	public void testFailures() throws Exception {
+	
+		log.info("Testing failures");
+	
+		String[] failures = new String[] { "test-bad-zip.zip",
+				"test-not-package.zip", "test-bad-file.zip" };
+		for (String failure : failures) {
+			try {
+				log.info("Testing " + failure);
+				File f = new File(URLDecoder.decode(getClass().getClassLoader()
+						.getResource(failure).getPath(), "UTF-8"));
+				packageManagerSvc.upload("test/" + failure, f);
+				packageManagerSvc.install(failure.replace(".zip", ""));
+			} catch (Exception e) {
+				log.error(e);
+			}
+		}
+		
+		log.info("Test Successful");
 	}
 
 }

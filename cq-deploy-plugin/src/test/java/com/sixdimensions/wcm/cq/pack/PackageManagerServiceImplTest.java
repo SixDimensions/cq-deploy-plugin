@@ -8,15 +8,16 @@ import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sixdimensions.wcm.cq.pack.service.AC_HANDLING;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 import com.sixdimensions.wcm.cq.service.CQService;
 
 public class PackageManagerServiceImplTest {
 
-	private PackageManagerService packageManagerSvc;
+	private boolean executeTests = true;
 	private Log log = new SystemStreamLog();
-	private boolean executeTests;
+	private PackageManagerService packageManagerSvc;
 
 	@Before
 	public void init() {
@@ -28,8 +29,10 @@ public class PackageManagerServiceImplTest {
 		config.setUseLegacy(false);
 		config.setUser("admin");
 		config.setPassword("admin");
-		config.setErrorOnFailure(false);
+		config.setErrorOnFailure(true);
 		config.setLog(log);
+		config.setAutosave(1024);
+		config.setAcHandling(AC_HANDLING.valueOf("ignore"));
 
 		packageManagerSvc = PackageManagerService.Factory.getPackageMgr(config);
 
@@ -45,6 +48,34 @@ public class PackageManagerServiceImplTest {
 		log.info("Init Complete");
 	}
 
+
+	@Test
+	public void testFailures() throws Exception {
+		log.info("Testing failures");
+		if (executeTests) {
+			String[] failures = new String[] { "test-bad-zip.zip",
+					"test-not-package.zip", "test-bad-file.zip" };
+			for (String failure : failures) {
+				try {
+					log.info("Testing " + failure);
+					File f = new File(URLDecoder.decode(getClass()
+							.getClassLoader().getResource(failure).getPath(),
+							"UTF-8"));
+					packageManagerSvc.upload("test/" + failure, f);
+					packageManagerSvc.install(failure);
+				} catch (Exception e) {
+					try{
+						packageManagerSvc.delete(failure);
+					}catch(Exception ee){
+						log.debug("Caught exception deleting test failure package: "+ee);
+					}
+					log.error(e);
+				}
+			}
+		}
+		log.info("Test Successful");
+	}
+
 	@Test
 	public void testUpload() throws Exception {
 		log.info("Testing Upload");
@@ -55,7 +86,7 @@ public class PackageManagerServiceImplTest {
 		}
 		log.info("Test Successful");
 	}
-
+	
 	@Test
 	public void testDryRun() throws Exception {
 		log.info("Testing Dry Run");
@@ -71,9 +102,10 @@ public class PackageManagerServiceImplTest {
 		if (executeTests) {
 			packageManagerSvc.install("test/test-1.0.0.zip");
 		}
+
 		log.info("Test Successful");
 	}
-
+	
 	@Test
 	public void testDelete() throws Exception {
 		log.info("Testing Delete");
@@ -82,4 +114,5 @@ public class PackageManagerServiceImplTest {
 		}
 		log.info("Test Successful");
 	}
+
 }
