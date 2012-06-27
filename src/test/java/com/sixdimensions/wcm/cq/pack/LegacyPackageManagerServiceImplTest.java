@@ -63,6 +63,7 @@ public class LegacyPackageManagerServiceImplTest {
 	public void testInstall() throws Exception {
 		log.info("Testing Install");
 		if (executeTests) {
+			packageManagerSvc.install("test/test");
 			try {
 				packageManagerSvc.install("my_packages/does-not-exist.zip");
 				fail("Exception expected");
@@ -77,6 +78,7 @@ public class LegacyPackageManagerServiceImplTest {
 	public void testDelete() throws Exception {
 		log.info("Testing Delete");
 		if (executeTests) {
+			packageManagerSvc.delete("test/test");
 			try {
 				packageManagerSvc.delete("my_packages/does-not-exist.zip");
 				fail("Exception expected");
