@@ -3,7 +3,7 @@
  ------
  Dan Klco
  ------
- 2012-03-19
+ 2012-06-27
  ------
 
 Adobe CQ Deploy Plugin
@@ -39,3 +39,5 @@ Adobe CQ Deploy Plugin
   you can take a look at the following examples:
 
   * {{{./examples/pom.xml}Sample POM}}
+  
+  * {{{./examples/myapp.zip}Sample Project}}
