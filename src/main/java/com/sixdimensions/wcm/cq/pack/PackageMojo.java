@@ -22,6 +22,7 @@ import java.io.File;
 
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 
 import com.sixdimensions.wcm.cq.AbstractCQMojo;
 import com.sixdimensions.wcm.cq.pack.service.AC_HANDLING;
@@ -114,7 +115,6 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 
 		PackageManagerConfig config = new PackageManagerConfig();
 		initConfig(config);
-		config.setUseLegacy(useLegacy);
 
 		getLog().info(
 				"Connecting to server: " + config.getHost() + ":"
@@ -124,20 +124,36 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 		getLog().debug("Retrieving service");
 		PackageManagerService packageMgrSvc = PackageManagerService.Factory
 				.getPackageMgr(config);
+
+		String packagePath = this.path;
+		if (config.isUseLegacy()) {
+			getLog().debug(
+					"Checking path: " + packagePath
+							+ " for compatibility with legacy API");
+			MavenProject project = (MavenProject) this.getPluginContext().get(
+					"project");
+			if (path.equals(project.getArtifactId() + "-" + project.getVersion()
+					+ "." + project.getPackaging())) {
+				getLog().debug("Updating path for legacy API");
+				packagePath = project.getArtifactId();
+			} else {
+				getLog().debug("Custom path specified, not modifying");
+			}
+		}
 		try {
 			if (deleteFirst) {
 				try {
-					packageMgrSvc.delete(path);
+					packageMgrSvc.delete(packagePath);
 				} catch (Exception e) {
 					getLog().warn(
 							"Exception deleting existing package, continuing with installation.",
 							e);
 				}
 			}
-			packageMgrSvc.upload(path, packageFile);
+			packageMgrSvc.upload(packagePath, packageFile);
 			getLog().info("Package upload successful");
 			if (!this.uploadOnly) {
-				packageMgrSvc.install(path);
+				packageMgrSvc.install(packagePath);
 				getLog().info("Package installation successful");
 			}
 		} catch (Exception e) {
@@ -184,6 +200,7 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 		}
 		config.setRecursive(this.isRecursive());
 		config.setAutosave(this.getAutosave());
+		config.setUseLegacy(useLegacy);
 	}
 
 	public boolean isDeleteFirst() {
