@@ -202,54 +202,68 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * @throws ParserConfigurationException
 	 */
 	private Response parseResponse(byte[] response)
-			throws XPathExpressionException, SAXException, IOException,
+			throws XPathExpressionException, IOException,
 			ParserConfigurationException {
 		log.debug("parseResponse");
 
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true); // never forget this!
-		Document doc = factory.newDocumentBuilder().parse(
-				new ByteArrayInputStream(response));
-
-		XPath xpath = XPathFactory.newInstance().newXPath();
-
-		// Sample response
-		//
-		// <crx version="2.0" user="admin" workspace="crx.default">
-		// <request>
-		// <param name="cmd" value="rm"/>
-		// <param name="name" value="myPackage"/>
-		// </request>
-		// <response>
-		// <status code="200">ok</status>
-		// </response>
-		// </crx>
-
-		log.debug("Parsing response code");
-		XPathExpression codeXpr = xpath.compile("/crx/response/status/@code");
-		int responseCode = -1;
+		Response responseObj = null;
 		try {
-			responseCode = Integer.parseInt(((NodeList) codeXpr.evaluate(doc,
-					XPathConstants.NODESET)).item(0).getNodeValue(), 10);
-		} catch (NumberFormatException nfe) {
-			log.warn("Unable to parse "
-					+ ((NodeList) codeXpr.evaluate(doc, XPathConstants.NODESET))
-							.item(0).getNodeValue() + " as a number");
-		}
+			DocumentBuilderFactory factory = DocumentBuilderFactory
+					.newInstance();
+			factory.setNamespaceAware(true); // never forget this!
+			Document doc = factory.newDocumentBuilder().parse(
+					new ByteArrayInputStream(response));
 
-		log.debug("Parsing response message");
-		XPathExpression messageXpr = xpath.compile("/crx/response/status");
-		String responseMessage = ((NodeList) messageXpr.evaluate(doc,
-				XPathConstants.NODESET)).item(0).getChildNodes().item(0)
-				.getNodeValue();
+			XPath xpath = XPathFactory.newInstance().newXPath();
 
-		Response responseObj = new Response(HttpStatus.SC_OK == responseCode,
-				responseCode, responseMessage);
-		log.debug("Response Code: " + responseCode);
-		if (HttpStatus.SC_OK == responseCode) {
-			log.debug("Response Message: " + responseMessage);
-		} else {
-			log.warn("Error Message: " + responseMessage);
+			// Sample response
+			//
+			// <crx version="2.0" user="admin" workspace="crx.default">
+			// <request>
+			// <param name="cmd" value="rm"/>
+			// <param name="name" value="myPackage"/>
+			// </request>
+			// <response>
+			// <status code="200">ok</status>
+			// </response>
+			// </crx>
+
+			log.debug("Parsing response code");
+			XPathExpression codeXpr = xpath
+					.compile("/crx/response/status/@code");
+			int responseCode = -1;
+			try {
+				responseCode = Integer.parseInt(((NodeList) codeXpr.evaluate(
+						doc, XPathConstants.NODESET)).item(0).getNodeValue(),
+						10);
+			} catch (NumberFormatException nfe) {
+				log.warn("Unable to parse "
+						+ ((NodeList) codeXpr.evaluate(doc,
+								XPathConstants.NODESET)).item(0).getNodeValue()
+						+ " as a number");
+			}
+
+			log.debug("Parsing response message");
+			XPathExpression messageXpr = xpath.compile("/crx/response/status");
+			String responseMessage = ((NodeList) messageXpr.evaluate(doc,
+					XPathConstants.NODESET)).item(0).getChildNodes().item(0)
+					.getNodeValue();
+
+			responseObj = new Response(HttpStatus.SC_OK == responseCode,
+					responseCode, responseMessage);
+			log.debug("Response Code: " + responseCode);
+			if (HttpStatus.SC_OK == responseCode) {
+				log.debug("Response Message: " + responseMessage);
+			} else {
+				log.warn("Error Message: " + responseMessage);
+			}
+		} catch (SAXException se) {
+			String message = "Exception parsing XML response, assuming failure.  "
+					+ "This often occurs when an invalid XML file is uploaded as the error message "
+					+ "is not properly escaped in the response.";
+			log.warn(message, se);
+			log.warn("Response contents: " + new String(response, "utf-8"));
+			responseObj = new Response(false,500,message);
 		}
 
 		return responseObj;
