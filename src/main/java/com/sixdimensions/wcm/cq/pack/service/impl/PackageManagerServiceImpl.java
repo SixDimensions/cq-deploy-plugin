@@ -24,7 +24,6 @@ import org.apache.maven.plugin.logging.Log;
 import org.json.JSONObject;
 
 import com.sixdimensions.wcm.cq.dao.HTTPServiceDAO;
-import com.sixdimensions.wcm.cq.pack.service.AC_HANDLING;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerConfig;
 import com.sixdimensions.wcm.cq.pack.service.PackageManagerService;
 

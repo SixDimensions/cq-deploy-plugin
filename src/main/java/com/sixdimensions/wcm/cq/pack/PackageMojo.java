@@ -132,8 +132,8 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 							+ " for compatibility with legacy API");
 			MavenProject project = (MavenProject) this.getPluginContext().get(
 					"project");
-			if (path.equals(project.getArtifactId() + "-" + project.getVersion()
-					+ "." + project.getPackaging())) {
+			if (path.equals(project.getArtifactId() + "-"
+					+ project.getVersion() + "." + project.getPackaging())) {
 				getLog().debug("Updating path for legacy API");
 				packagePath = project.getArtifactId();
 			} else {
@@ -190,13 +190,16 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 	protected void initConfig(CQServiceConfig cfg) {
 		super.initConfig(cfg);
 		PackageManagerConfig config = (PackageManagerConfig) cfg;
-		try {
-			config.setAcHandling(AC_HANDLING.valueOf(this.getAcHandling()));
-		} catch (IllegalArgumentException iae) {
-			getLog().info(
-					"Unable to parse Access Control Handler from: "
-							+ this.getAcHandling() + " using default");
-			config.setAcHandling(AC_HANDLING.DEFAULT);
+		if (this.getAcHandling() != null
+				&& this.getAcHandling().trim().length() > 0) {
+			try {
+				config.setAcHandling(AC_HANDLING.valueOf(this.getAcHandling()));
+			} catch (IllegalArgumentException iae) {
+				getLog().info(
+						"Unable to parse Access Control Handler from: "
+								+ this.getAcHandling() + " using default");
+				config.setAcHandling(AC_HANDLING.DEFAULT);
+			}
 		}
 		config.setRecursive(this.isRecursive());
 		config.setAutosave(this.getAutosave());
