@@ -1,9 +1,9 @@
  ------
- install-bundle
+ CQ Deploy Plugin :: Goals :: install-bundle
  ------
  Dan Klco
  ------
- 2012-07-29
+ 2012-08-02
  ------
 
 install-bundle
@@ -47,7 +47,7 @@ install-bundle
   
   <<bundleFile>>
   
-  Location of the bundle file. Default is '${project.artifactId}-${project.version}.jar'
+  Location of the bundle file. Default is '$\{project.artifactId\}-$\{project.version\}.jar'
 
 
   <<errorOnFailure>>
@@ -68,7 +68,7 @@ install-bundle
   <<path>>
   
   The path to upload the package to. If the app name is not specified the default is "/apps/bundles/install", 
-  if the app.name property is specified the path will be /apps/${app.name}/install
+  if the app.name property is specified the path will be /apps/$\{app.name\}/install
 
 
   <<port>>

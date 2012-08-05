@@ -5,7 +5,13 @@
 		<author email="dan.klco@sixdimensions.com">Dan Klco</author>
 	</properties>
 	<body>
-		<release version="0.1.4" date="2012-07-29" description="Current stable release">
+		<release version="0.1.5" date="2012-??-??" description="Current stable release">
+			<action dev="Dan Klco" type="fix">
+				Fixed broken links on the maven
+				site.
+			</action>
+		</release>
+		<release version="0.1.4" date="2012-08-02" description="Current stable release">
 			<action dev="Dan Klco" type="add">
 				Added the ability to skip the
 				installation of bundles.
