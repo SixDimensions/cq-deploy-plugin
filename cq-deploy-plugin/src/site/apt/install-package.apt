@@ -1,9 +1,9 @@
  ------
- install-package
+ CQ Deploy Plugin :: Goals :: install-package
  ------
  Dan Klco
  ------
- 2012-07-29
+ 2012-08-02
  ------
 
 install-package
@@ -59,7 +59,7 @@ install-package
   
   <<packageFile>>
   
-  Location of the file. Default is "${project.artifactId}-${project.version}.${project.packaging}"
+  Location of the file. Default is "$\{project.artifactId\}-$\{project.version\}.$\{project.packaging\}"
   
   
   <<password>>
@@ -69,7 +69,7 @@ install-package
   
   <<path>>
   
-  The path to upload the package to. Default is '${project.artifactId}-${project.version}.jar'
+  The path to upload the package to. Default is '$\{project.artifactId\}-$\{project.version\}.jar'
   
   
   <<port>>
