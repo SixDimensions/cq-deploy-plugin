@@ -28,40 +28,99 @@ import com.sixdimensions.wcm.cq.service.CQServiceConfig;
  */
 public class PackageManagerConfig extends CQServiceConfig {
 
-	private AC_HANDLING acHandling =  AC_HANDLING.DEFAULT;
+	/**
+	 * The Access Control handling.
+	 */
+	private AC_HANDLING acHandling = AC_HANDLING.DEFAULT;
+
+	/**
+	 * How frequently to save, defaults to 1024.
+	 */
 	private int autosave = 1024;
+
+	/**
+	 * Whether to recursively load packages inside this package.
+	 */
 	private boolean recursive = true;
+
+	/**
+	 * Whether or not to use the legacy API.
+	 */
 	private boolean useLegacy = false;
 
+	/**
+	 * Gets the Access Control Handling.
+	 * 
+	 * @return the access control handling
+	 */
 	public AC_HANDLING getAcHandling() {
-		return acHandling;
+		return this.acHandling;
 	}
 
+	/**
+	 * Gets the autosave interval.
+	 * 
+	 * @return the autosave interval
+	 */
 	public int getAutosave() {
-		return autosave;
+		return this.autosave;
 	}
 
+	/**
+	 * Gets the recusive flag.
+	 * 
+	 * @return the recursive flag
+	 */
 	public boolean isRecursive() {
-		return recursive;
+		return this.recursive;
 	}
 
+	/**
+	 * Gets the legacy flag.
+	 * 
+	 * @return the legacy flag
+	 */
 	public boolean isUseLegacy() {
-		return useLegacy;
+		return this.useLegacy;
 	}
 
-	public void setAcHandling(AC_HANDLING acHandling) {
+	/**
+	 * Set the Access control handling.
+	 * 
+	 * @param acHandling
+	 *            the access control handling
+	 */
+	public void setAcHandling(final AC_HANDLING acHandling) {
 		this.acHandling = acHandling;
 	}
 
-	public void setAutosave(int autosave) {
+	/**
+	 * Set the auto save interval.
+	 * 
+	 * @param autosave
+	 *            the auto save interval
+	 */
+	public void setAutosave(final int autosave) {
 		this.autosave = autosave;
 	}
 
-	public void setRecursive(boolean recursive) {
+	/**
+	 * Set the recursive flag.
+	 * 
+	 * @param recursive
+	 *            the recursive flag
+	 */
+	public void setRecursive(final boolean recursive) {
 		this.recursive = recursive;
 	}
 
-	public void setUseLegacy(boolean useLegacy) {
+	/**
+	 * Set the use legacy API flag.
+	 * 
+	 * @param useLegacy
+	 *            the use legacy api flag
+	 */
+	public void setUseLegacy(final boolean useLegacy) {
 		this.useLegacy = useLegacy;
 	}
 

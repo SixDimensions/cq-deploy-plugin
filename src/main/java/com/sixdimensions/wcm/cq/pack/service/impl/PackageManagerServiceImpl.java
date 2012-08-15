@@ -39,12 +39,12 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 				"?cmd=upload");
 		private final String cmd;
 
-		COMMAND(String cmd) {
+		COMMAND(final String cmd) {
 			this.cmd = cmd;
 		}
 
 		public String getCmd() {
-			return cmd;
+			return this.cmd;
 		}
 	}
 
@@ -56,9 +56,9 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	private static final String PACK_MGR_PATH = "/crx/packmgr/service/.json";
 	private static final String PACKAGE_BASE_PATH = "/etc/packages/";
 	private static final String SUCCESS_KEY = "success";
-	private PackageManagerConfig config;
-	private Log log;
-	private HTTPServiceDAO pmAPI;
+	private final PackageManagerConfig config;
+	private final Log log;
+	private final HTTPServiceDAO pmAPI;
 
 	/**
 	 * Create a new Package Manager Service instance.
@@ -67,10 +67,10 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	 *            the configuration with which to instantiate the package
 	 *            manager service
 	 */
-	public PackageManagerServiceImpl(PackageManagerConfig config) {
-		log = config.getLog();
+	public PackageManagerServiceImpl(final PackageManagerConfig config) {
+		this.log = config.getLog();
 		this.config = config;
-		pmAPI = new HTTPServiceDAO(config);
+		this.pmAPI = new HTTPServiceDAO(config);
 	}
 
 	/**
@@ -80,14 +80,14 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	 *            the path of the package to be updated
 	 * @return the url
 	 */
-	protected String assembleUrl(String path) {
-		log.debug("assembleUrl");
+	protected String assembleUrl(final String path) {
+		this.log.debug("assembleUrl");
 		if (path.startsWith("/")) {
-			return config.getHost() + ":" + config.getPort() + PACK_MGR_PATH
-					+ path;
+			return this.config.getHost() + ":" + this.config.getPort()
+					+ PACK_MGR_PATH + path;
 		} else {
-			return config.getHost() + ":" + config.getPort() + PACK_MGR_PATH
-					+ PACKAGE_BASE_PATH + path;
+			return this.config.getHost() + ":" + this.config.getPort()
+					+ PACK_MGR_PATH + PACKAGE_BASE_PATH + path;
 		}
 	}
 
@@ -98,28 +98,28 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#delete(java
 	 * .lang.String)
 	 */
-	public void delete(String path) throws Exception {
-		log.debug("delete");
+	public void delete(final String path) throws Exception {
+		this.log.debug("delete");
 
-		log.info("Deleting package at path: " + path);
-		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
-				+ COMMAND.DELETE.getCmd()), "UTF-8");
-		log.debug("Response: " + responseStr);
+		this.log.info("Deleting package at path: " + path);
+		final String responseStr = new String(this.pmAPI.doPost(this
+				.assembleUrl(path) + COMMAND.DELETE.getCmd()), "UTF-8");
+		this.log.debug("Response: " + responseStr);
 
-		JSONObject result = new JSONObject(responseStr);
-		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
-		log.debug("Message: " + result.getString(MESSAGE_KEY));
+		final JSONObject result = new JSONObject(responseStr);
+		this.log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
+		this.log.debug("Message: " + result.getString(MESSAGE_KEY));
 
 		if (result.getBoolean(SUCCESS_KEY)) {
-			log.info("Delete succeeded");
+			this.log.info("Delete succeeded");
 		} else {
-			log.warn("Delete failed: " + result.getString(MESSAGE_KEY));
+			this.log.warn("Delete failed: " + result.getString(MESSAGE_KEY));
 		}
 
-		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
+		if (!result.getBoolean(SUCCESS_KEY) && this.config.isErrorOnFailure()) {
 			if (path.endsWith(".jar")) {
-				log.warn("Delete failed with jar, trying with zip.");
-				delete(path.replace(".jar", ".zip"));
+				this.log.warn("Delete failed with jar, trying with zip.");
+				this.delete(path.replace(".jar", ".zip"));
 			} else {
 				throw new Exception("Failed to complete delete: "
 						+ result.getString(MESSAGE_KEY));
@@ -134,66 +134,30 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#dryRun(java
 	 * .lang.String)
 	 */
-	public void dryRun(String path) throws Exception {
-		log.debug("dryRun");
+	public void dryRun(final String path) throws Exception {
+		this.log.debug("dryRun");
 
-		log.info("Performing Dry Run on package at path: " + path);
-		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
-				+ COMMAND.DRY_RUN.getCmd()), "UTF-8");
-		log.debug("Response: " + responseStr);
+		this.log.info("Performing Dry Run on package at path: " + path);
+		final String responseStr = new String(this.pmAPI.doPost(this
+				.assembleUrl(path) + COMMAND.DRY_RUN.getCmd()), "UTF-8");
+		this.log.debug("Response: " + responseStr);
 
-		JSONObject result = new JSONObject(responseStr);
-		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
-		log.debug("Message: " + result.getString(MESSAGE_KEY));
+		final JSONObject result = new JSONObject(responseStr);
+		this.log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
+		this.log.debug("Message: " + result.getString(MESSAGE_KEY));
 
 		if (result.getBoolean(SUCCESS_KEY)) {
-			log.info("Dry Run succeeded");
+			this.log.info("Dry Run succeeded");
 		} else {
-			log.warn("Dry Run failed: " + result.getString(MESSAGE_KEY));
+			this.log.warn("Dry Run failed: " + result.getString(MESSAGE_KEY));
 		}
 
-		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
+		if (!result.getBoolean(SUCCESS_KEY) && this.config.isErrorOnFailure()) {
 			if (path.endsWith(".jar")) {
-				log.warn("Dry run failed with jar, trying with zip.");
-				dryRun(path.replace(".jar", ".zip"));
+				this.log.warn("Dry run failed with jar, trying with zip.");
+				this.dryRun(path.replace(".jar", ".zip"));
 			} else {
 				throw new Exception("Failed to complete installation dry run: "
-						+ result.getString(MESSAGE_KEY));
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#install(java
-	 * .lang.String)
-	 */
-	public void install(String path) throws Exception {
-		log.debug("install");
-
-		log.info("Installing package at path: " + path);
-		String responseStr = new String(pmAPI.doPost(assembleUrl(path)
-				+ COMMAND.INSTALL.getCmd() + getInstallParameters()), "UTF-8");
-		log.debug("Response: " + responseStr);
-
-		JSONObject result = new JSONObject(responseStr);
-		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
-		log.debug("Message: " + result.getString(MESSAGE_KEY));
-
-		if (result.getBoolean(SUCCESS_KEY)) {
-			log.info("Installation succeeded");
-		} else {
-			log.warn("Installation failed: " + result.getString(MESSAGE_KEY));
-		}
-
-		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
-			if (path.endsWith(".jar")) {
-				log.warn("Installation failed with jar, trying with zip.");
-				install(path.replace(".jar", ".zip"));
-			} else {
-				throw new Exception("Failed to complete installation: "
 						+ result.getString(MESSAGE_KEY));
 			}
 		}
@@ -205,13 +169,53 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	 * @return the extended installation parameters
 	 */
 	private String getInstallParameters() {
-		log.debug("getInstallParameters");
-		String paramStr = "&" + PARAM_AUTOSAVE + "=" + config.getAutosave();
+		this.log.debug("getInstallParameters");
+		String paramStr = "&" + PARAM_AUTOSAVE + "="
+				+ this.config.getAutosave();
 		paramStr += "&" + PARAM_AC_HANDLING + "="
-				+ config.getAcHandling().getValue();
-		paramStr += "&" + PARAM_RECURSIVE + "=" + config.isRecursive();
-		log.debug("Retrieved parameters: " + paramStr);
+				+ this.config.getAcHandling().getValue();
+		paramStr += "&" + PARAM_RECURSIVE + "=" + this.config.isRecursive();
+		this.log.debug("Retrieved parameters: " + paramStr);
 		return paramStr;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#install(java
+	 * .lang.String)
+	 */
+	public void install(final String path) throws Exception {
+		this.log.debug("install");
+
+		this.log.info("Installing package at path: " + path);
+		final String responseStr = new String(this.pmAPI.doPost(this
+				.assembleUrl(path)
+				+ COMMAND.INSTALL.getCmd()
+				+ this.getInstallParameters()), "UTF-8");
+		this.log.debug("Response: " + responseStr);
+
+		final JSONObject result = new JSONObject(responseStr);
+		this.log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
+		this.log.debug("Message: " + result.getString(MESSAGE_KEY));
+
+		if (result.getBoolean(SUCCESS_KEY)) {
+			this.log.info("Installation succeeded");
+		} else {
+			this.log.warn("Installation failed: "
+					+ result.getString(MESSAGE_KEY));
+		}
+
+		if (!result.getBoolean(SUCCESS_KEY) && this.config.isErrorOnFailure()) {
+			if (path.endsWith(".jar")) {
+				this.log.warn("Installation failed with jar, trying with zip.");
+				this.install(path.replace(".jar", ".zip"));
+			} else {
+				throw new Exception("Failed to complete installation: "
+						+ result.getString(MESSAGE_KEY));
+			}
+		}
 	}
 
 	/*
@@ -221,25 +225,27 @@ public class PackageManagerServiceImpl implements PackageManagerService {
 	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#upload(java
 	 * .lang.String, java.io.File)
 	 */
-	public void upload(String path, File pkg) throws Exception {
-		log.debug("upload");
+	public void upload(final String path, final File pkg) throws Exception {
+		this.log.debug("upload");
 
-		log.info("Uploading package " + pkg.getAbsolutePath() + " to path: "
-				+ path);
-		String responseStr = new String(pmAPI.postFile(assembleUrl(path)
-				+ COMMAND.UPLOAD.getCmd(), FILE_KEY, pkg), "UTF-8");
-		log.debug("Response: " + responseStr);
-		JSONObject result = new JSONObject(responseStr);
+		this.log.info("Uploading package " + pkg.getAbsolutePath()
+				+ " to path: " + path);
+		final String responseStr = new String(
+				this.pmAPI.postFile(
+						this.assembleUrl(path) + COMMAND.UPLOAD.getCmd(),
+						FILE_KEY, pkg), "UTF-8");
+		this.log.debug("Response: " + responseStr);
+		final JSONObject result = new JSONObject(responseStr);
 
-		log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
-		log.debug("Message: " + result.getString(MESSAGE_KEY));
+		this.log.debug("Succeeded: " + result.getBoolean(SUCCESS_KEY));
+		this.log.debug("Message: " + result.getString(MESSAGE_KEY));
 
 		if (result.getBoolean(SUCCESS_KEY)) {
-			log.info("Upload succeeded");
+			this.log.info("Upload succeeded");
 		} else {
-			log.warn("Upload failed: " + result.getString(MESSAGE_KEY));
+			this.log.warn("Upload failed: " + result.getString(MESSAGE_KEY));
 		}
-		if (!result.getBoolean(SUCCESS_KEY) && config.isErrorOnFailure()) {
+		if (!result.getBoolean(SUCCESS_KEY) && this.config.isErrorOnFailure()) {
 			throw new Exception("Failed to upload package: "
 					+ result.getString(MESSAGE_KEY));
 		}

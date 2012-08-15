@@ -33,11 +33,24 @@ import org.apache.maven.plugin.logging.Log;
 
 import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
-/** Client functions to interact with Sling in integration tests */
+/**
+ * Client functions to interact with Sling in integration tests.
+ */
 public class WebDavDAO {
+	/**
+	 * The HTTP Client instance for this DAO.
+	 */
 	private HttpClient httpClient;
-	private CQServiceConfig config;
-	private Log log;
+
+	/**
+	 * The configuration instance for this DAO.
+	 */
+	private final CQServiceConfig config;
+
+	/**
+	 * The logger for this DAO.
+	 */
+	private final Log log;
 
 	/**
 	 * Construct a new PackageManagerAPIDAO with the specified configuration.
@@ -45,39 +58,9 @@ public class WebDavDAO {
 	 * @param config
 	 *            the configuration to use
 	 */
-	public WebDavDAO(CQServiceConfig config) {
+	public WebDavDAO(final CQServiceConfig config) {
 		this.config = config;
 		this.log = config.getLog();
-	}
-
-	/**
-	 * Initializes the connection.
-	 */
-	public void init() {
-		// setup HTTP client, with authentication
-		httpClient = new HttpClient();
-		httpClient.getParams().setAuthenticationPreemptive(true);
-		Credentials defaultcreds = new UsernamePasswordCredentials(
-				config.getUser(), config.getPassword());
-		httpClient.getState()
-				.setCredentials(
-						new AuthScope(config.getHost().substring(
-								config.getHost().lastIndexOf("/") + 1),
-								Integer.parseInt(config.getPort()),
-								AuthScope.ANY_REALM), defaultcreds);
-
-	}
-
-	/**
-	 * Delete a file from the Sling repository
-	 * 
-	 * @return the HTTP status code
-	 */
-	public int delete(String path) throws IOException {
-		log.debug("delete");
-		final DeleteMethod delete = new DeleteMethod(config.getHost() + ":"
-				+ config.getPort() + path);
-		return httpClient.executeMethod(delete);
 	}
 
 	/**
@@ -87,18 +70,32 @@ public class WebDavDAO {
 	 *            the path at which to create the folder
 	 * @throws IOException
 	 */
-	public void createFolder(String path) throws IOException {
-		log.debug("createFolder");
+	public void createFolder(final String path) throws IOException {
+		this.log.debug("createFolder");
 		int status = 0;
-		String url = config.getHost() + ":" + config.getPort() + path;
-		status = httpClient.executeMethod(new GetMethod(url + ".txt"));
+		final String url = this.config.getHost() + ":" + this.config.getPort()
+				+ path;
+		status = this.httpClient.executeMethod(new GetMethod(url + ".txt"));
 		if (status != 200) {
-			status = httpClient.executeMethod(new HttpAnyMethod("MKCOL", url));
+			status = this.httpClient.executeMethod(new HttpAnyMethod("MKCOL",
+					url));
 			if (status != 201) {
 				throw new IOException("mkdir(" + url + ") failed, status code="
 						+ status);
 			}
 		}
+	}
+
+	/**
+	 * Delete a file from the Sling repository
+	 * 
+	 * @return the HTTP status code
+	 */
+	public int delete(final String path) throws IOException {
+		this.log.debug("delete");
+		final DeleteMethod delete = new DeleteMethod(this.config.getHost()
+				+ ":" + this.config.getPort() + path);
+		return this.httpClient.executeMethod(delete);
 	}
 
 	/**
@@ -112,13 +109,31 @@ public class WebDavDAO {
 	 * @throws HttpException
 	 */
 	public boolean folderExists(String path) throws HttpException, IOException {
-		log.debug("folderExists");
+		this.log.debug("folderExists");
 		int status = 0;
 		path += ".json";
-		String url = config.getHost() + ":" + config.getPort() + path;
-		log.debug("Checking URL: " + url);
-		status = httpClient.executeMethod(new GetMethod(url));
+		final String url = this.config.getHost() + ":" + this.config.getPort()
+				+ path;
+		this.log.debug("Checking URL: " + url);
+		status = this.httpClient.executeMethod(new GetMethod(url));
 		return status == 200;
+	}
+
+	/**
+	 * Initializes the connection.
+	 */
+	public void init() {
+		// setup HTTP client, with authentication
+		this.httpClient = new HttpClient();
+		this.httpClient.getParams().setAuthenticationPreemptive(true);
+		final Credentials defaultcreds = new UsernamePasswordCredentials(
+				this.config.getUser(), this.config.getPassword());
+		this.httpClient.getState().setCredentials(
+				new AuthScope(this.config.getHost().substring(
+						this.config.getHost().lastIndexOf("/") + 1),
+						Integer.parseInt(this.config.getPort()),
+						AuthScope.ANY_REALM), defaultcreds);
+
 	}
 
 	/**
@@ -130,16 +145,17 @@ public class WebDavDAO {
 	 *            the path to which to upload the file
 	 * @throws IOException
 	 */
-	public void uploadFile(File file, String path) throws IOException {
-		log.debug("uploadFile");
-		String url = config.getHost() + ":" + config.getPort() + path + "/"
-				+ file.getName();
+	public void uploadFile(final File file, final String path)
+			throws IOException {
+		this.log.debug("uploadFile");
+		final String url = this.config.getHost() + ":" + this.config.getPort()
+				+ path + "/" + file.getName();
 		final PutMethod put = new PutMethod(url);
 
 		put.setRequestEntity(new InputStreamRequestEntity(new FileInputStream(
 				file)));
-		int status = httpClient.executeMethod(put);
-		if (status != 200 && status != 201 && status != 204) {
+		final int status = this.httpClient.executeMethod(put);
+		if ((status != 200) && (status != 201) && (status != 204)) {
 			throw new IOException("uploadFile(" + url
 					+ ") failed, status code=" + status);
 		}

@@ -20,33 +20,80 @@ package com.sixdimensions.wcm.cq.dao.webdav;
 
 import java.io.IOException;
 
+/**
+ * Exception thrown when the expected status code is not returned.
+ * 
+ * 
+ */
 @SuppressWarnings("serial")
 public class HttpStatusCodeException extends IOException {
 
-    private final int expectedStatus;
-    
-    private final int actualStatus;
-    
-    public HttpStatusCodeException(int expectedStatus, int actualStatus,
-            String method, String url) {
-        this(expectedStatus, actualStatus, method, url, null);
-    }
+	/**
+	 * The expected status.
+	 */
+	private final int expectedStatus;
 
-    public HttpStatusCodeException(int expectedStatus, int actualStatus,
-            String method, String url, String content) {
-        super("Expected status code " + expectedStatus + " for " + method
-                + ", got " + actualStatus + ", URL=" + url 
-                + (content != null ? ", Content=[" + content + "]" : "")
-                );
-        this.expectedStatus = expectedStatus;
-        this.actualStatus = actualStatus;
-    }
+	/**
+	 * The actual status returned.
+	 */
+	private final int actualStatus;
 
-    public int getExpectedStatus() {
-        return expectedStatus;
-    }
-    
-    public int getActualStatus() {
-        return actualStatus;
-    }
+	/**
+	 * Construct a new Http Status Code Exception instance.
+	 * 
+	 * @param expectedStatus
+	 *            the expected status
+	 * @param actualStatus
+	 *            the actual status
+	 * @param method
+	 *            the http method invoked
+	 * @param url
+	 *            the url invoked
+	 */
+	public HttpStatusCodeException(final int expectedStatus,
+			final int actualStatus, final String method, final String url) {
+		this(expectedStatus, actualStatus, method, url, null);
+	}
+
+	/**
+	 * Construct a new Http Status Code Exception instance.
+	 * 
+	 * @param expectedStatus
+	 *            the expected status
+	 * @param actualStatus
+	 *            the actual status
+	 * @param method
+	 *            the http method invoked
+	 * @param url
+	 *            the url invoked
+	 * @param content
+	 *            the content returned from the request
+	 */
+	public HttpStatusCodeException(final int expectedStatus,
+			final int actualStatus, final String method, final String url,
+			final String content) {
+		super("Expected status code " + expectedStatus + " for " + method
+				+ ", got " + actualStatus + ", URL=" + url
+				+ (content != null ? ", Content=[" + content + "]" : ""));
+		this.expectedStatus = expectedStatus;
+		this.actualStatus = actualStatus;
+	}
+
+	/**
+	 * Gets the actual status.
+	 * 
+	 * @return the actual status
+	 */
+	public int getActualStatus() {
+		return this.actualStatus;
+	}
+
+	/**
+	 * Gets the expected status.
+	 * 
+	 * @return the expected status
+	 */
+	public int getExpectedStatus() {
+		return this.expectedStatus;
+	}
 }

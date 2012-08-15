@@ -28,14 +28,14 @@ import com.sixdimensions.wcm.cq.service.CQServiceConfig;
 
 public class CQWebDavService implements CQService {
 
-	private Log log;
-	private CQServiceConfig config;
-	private WebDavDAO webDavDAO;
+	private final Log log;
+	private final CQServiceConfig config;
+	private final WebDavDAO webDavDAO;
 
-	public CQWebDavService(CQServiceConfig config) {
-		log = config.getLog();
+	public CQWebDavService(final CQServiceConfig config) {
+		this.log = config.getLog();
 		this.config = config;
-		webDavDAO = new WebDavDAO(config);
+		this.webDavDAO = new WebDavDAO(config);
 	}
 
 	/**
@@ -45,9 +45,9 @@ public class CQWebDavService implements CQService {
 	 *            the path of the package to be updated
 	 * @return the url
 	 */
-	protected String assembleUrl(String path) {
-		log.debug("assembleUrl");
-		return config.getHost() + ":" + config.getPort() + path;
+	protected String assembleUrl(final String path) {
+		this.log.debug("assembleUrl");
+		return this.config.getHost() + ":" + this.config.getPort() + path;
 	}
 
 	/*
@@ -56,18 +56,18 @@ public class CQWebDavService implements CQService {
 	 * @see
 	 * com.sixdimensions.wcm.cq.service.CQService#createFolder(java.lang.String)
 	 */
-	public void createFolder(String path) throws Exception {
-		log.debug("createFolder");
+	public void createFolder(final String path) throws Exception {
+		this.log.debug("createFolder");
 
-		webDavDAO.init();
-		if (!webDavDAO.folderExists(path)) {
-			String[] parts = path.split("/");
+		this.webDavDAO.init();
+		if (!this.webDavDAO.folderExists(path)) {
+			final String[] parts = path.split("/");
 
-			StringBuffer createPath = new StringBuffer();
+			final StringBuffer createPath = new StringBuffer();
 			for (int i = 1; i < parts.length; i++) {
 				createPath.append("/" + parts[i]);
-				if (!webDavDAO.folderExists(createPath.toString())) {
-					webDavDAO.createFolder(createPath.toString());
+				if (!this.webDavDAO.folderExists(createPath.toString())) {
+					this.webDavDAO.createFolder(createPath.toString());
 				}
 			}
 		}
@@ -78,11 +78,11 @@ public class CQWebDavService implements CQService {
 	 * 
 	 * @see com.sixdimensions.wcm.cq.service.CQService#delete(java.lang.String)
 	 */
-	public void delete(String path) throws Exception {
-		log.debug("delete");
+	public void delete(final String path) throws Exception {
+		this.log.debug("delete");
 
-		webDavDAO.init();
-		webDavDAO.delete(path);
+		this.webDavDAO.init();
+		this.webDavDAO.delete(path);
 	}
 
 	/*
@@ -91,16 +91,16 @@ public class CQWebDavService implements CQService {
 	 * @see com.sixdimensions.wcm.cq.service.CQService#uploadFile(java.io.File,
 	 * java.lang.String)
 	 */
-	public void uploadFile(File file, String path) throws Exception {
-		log.debug("uploadFile");
+	public void uploadFile(final File file, final String path) throws Exception {
+		this.log.debug("uploadFile");
 
-		log.debug("Uploading file " + file.getAbsolutePath() + " to  path: "
-				+ path);
+		this.log.debug("Uploading file " + file.getAbsolutePath()
+				+ " to  path: " + path);
 
-		createFolder(path);
+		this.createFolder(path);
 
-		webDavDAO.init();
-		webDavDAO.uploadFile(file, path);
+		this.webDavDAO.init();
+		this.webDavDAO.uploadFile(file, path);
 	}
 
 }

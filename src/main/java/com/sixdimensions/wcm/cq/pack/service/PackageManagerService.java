@@ -30,8 +30,6 @@ import com.sixdimensions.wcm.cq.pack.service.impl.PackageManagerServiceImpl;
  * @author dklco
  */
 public interface PackageManagerService {
-	public static final String PACKAGES_BASE_PATH = "/etc/packages";
-
 	/**
 	 * Factory for creating instances of the PackageManagerService. Using this
 	 * you don't need to have any knowledge of the implementing class.
@@ -46,7 +44,7 @@ public interface PackageManagerService {
 		 * @return the instance of the Package Manager Service
 		 */
 		public static PackageManagerService getPackageMgr(
-				PackageManagerConfig config) {
+				final PackageManagerConfig config) {
 			PackageManagerService svc = null;
 			if (config.isUseLegacy()) {
 				svc = new LegacyPackageManagerServiceImpl(config);
@@ -56,6 +54,11 @@ public interface PackageManagerService {
 			return svc;
 		}
 	}
+
+	/**
+	 * The base path under which the packages are stored.
+	 */
+	public static final String PACKAGES_BASE_PATH = "/etc/packages";
 
 	/**
 	 * Deletes the package at the specified path. Attempting to delete a file

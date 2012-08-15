@@ -36,50 +36,50 @@ public class CQServiceConfig {
 	private String password = "admin";
 
 	public String getHost() {
-		return host;
+		return this.host;
 	}
 
 	public Log getLog() {
-		return log;
+		return this.log;
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	public String getPort() {
-		return port;
+		return this.port;
 	}
 
 	public String getUser() {
-		return user;
+		return this.user;
 	}
 
 	public boolean isErrorOnFailure() {
-		return errorOnFailure;
+		return this.errorOnFailure;
 	}
 
-	public void setErrorOnFailure(boolean errorOnFailure) {
+	public void setErrorOnFailure(final boolean errorOnFailure) {
 		this.errorOnFailure = errorOnFailure;
 	}
 
-	public void setHost(String host) {
+	public void setHost(final String host) {
 		this.host = host;
 	}
 
-	public void setLog(Log log) {
+	public void setLog(final Log log) {
 		this.log = log;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
-	public void setPort(String port) {
+	public void setPort(final String port) {
 		this.port = port;
 	}
 
-	public void setUser(String user) {
+	public void setUser(final String user) {
 		this.user = user;
 	}
 }
