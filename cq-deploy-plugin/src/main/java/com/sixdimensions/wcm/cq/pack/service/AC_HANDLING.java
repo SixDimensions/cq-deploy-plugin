@@ -39,7 +39,7 @@ public enum AC_HANDLING {
 	 *            the string representation of the value for this AC_HANDLING
 	 *            instance
 	 */
-	AC_HANDLING(String value) {
+	AC_HANDLING(final String value) {
 		this.value = value;
 	}
 
@@ -49,6 +49,6 @@ public enum AC_HANDLING {
 	 * @return the value string
 	 */
 	public String getValue() {
-		return value;
+		return this.value;
 	}
 }

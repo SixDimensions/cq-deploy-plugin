@@ -46,8 +46,15 @@ import com.sixdimensions.wcm.cq.service.CQServiceConfig;
  * @author dklco
  */
 public class HTTPServiceDAO {
-	private CQServiceConfig config;
-	private Log log;
+	/**
+	 * The configuration for the instance of the DAO.
+	 */
+	private final CQServiceConfig config;
+
+	/**
+	 * The logger
+	 */
+	private final Log log;
 
 	/**
 	 * Construct a new PackageManagerAPIDAO with the specified configuration.
@@ -55,7 +62,7 @@ public class HTTPServiceDAO {
 	 * @param config
 	 *            the configuration to use
 	 */
-	public HTTPServiceDAO(CQServiceConfig config) {
+	public HTTPServiceDAO(final CQServiceConfig config) {
 		this.config = config;
 		this.log = config.getLog();
 	}
@@ -71,23 +78,23 @@ public class HTTPServiceDAO {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	public byte[] doGet(String url) throws ParseException, IOException,
+	public byte[] doGet(final String url) throws ParseException, IOException,
 			AuthenticationException {
-		log.debug("doGet");
-		DefaultHttpClient httpclient = new DefaultHttpClient();
+		this.log.debug("doGet");
+		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
-			HttpGet httpget = new HttpGet(url);
+			final HttpGet httpget = new HttpGet(url);
 
 			httpget.addHeader(new BasicScheme().authenticate(
-					new UsernamePasswordCredentials(config.getUser(), config
-							.getPassword()), httpget));
+					new UsernamePasswordCredentials(this.config.getUser(),
+							this.config.getPassword()), httpget));
 
-			log.debug("executing request " + httpget.getRequestLine());
-			HttpResponse response = httpclient.execute(httpget);
+			this.log.debug("executing request " + httpget.getRequestLine());
+			final HttpResponse response = httpclient.execute(httpget);
 
-			log.debug("Recieving response");
+			this.log.debug("Recieving response");
 			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
-				HttpEntity resEntity = response.getEntity();
+				final HttpEntity resEntity = response.getEntity();
 
 				return EntityUtils.toByteArray(resEntity);
 			} else {
@@ -98,7 +105,7 @@ public class HTTPServiceDAO {
 		} finally {
 			try {
 				httpclient.getConnectionManager().shutdown();
-			} catch (Exception ignore) {
+			} catch (final Exception ignore) {
 			}
 		}
 	}
@@ -114,27 +121,27 @@ public class HTTPServiceDAO {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	public byte[] doPost(String url) throws ParseException, IOException,
+	public byte[] doPost(final String url) throws ParseException, IOException,
 			AuthenticationException {
-		log.debug("doPost");
-		DefaultHttpClient httpclient = new DefaultHttpClient();
+		this.log.debug("doPost");
+		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
-			HttpPost httppost = new HttpPost(url);
+			final HttpPost httppost = new HttpPost(url);
 
 			httppost.addHeader(new BasicScheme().authenticate(
-					new UsernamePasswordCredentials(config.getUser(), config
-							.getPassword()), httppost));
+					new UsernamePasswordCredentials(this.config.getUser(),
+							this.config.getPassword()), httppost));
 
-			log.debug("executing request " + httppost.getRequestLine());
-			HttpResponse response = httpclient.execute(httppost);
+			this.log.debug("executing request " + httppost.getRequestLine());
+			final HttpResponse response = httpclient.execute(httppost);
 
-			log.debug("Recieving response");
+			this.log.debug("Recieving response");
 			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
-				HttpEntity resEntity = response.getEntity();
+				final HttpEntity resEntity = response.getEntity();
 				return EntityUtils.toByteArray(resEntity);
 			} else {
-				HttpEntity resEntity = response.getEntity();
-				log.debug(EntityUtils.toString(resEntity));
+				final HttpEntity resEntity = response.getEntity();
+				this.log.debug(EntityUtils.toString(resEntity));
 				throw new IOException("Invalid response: "
 						+ response.getStatusLine().getStatusCode() + " "
 						+ response.getStatusLine().getReasonPhrase());
@@ -142,7 +149,7 @@ public class HTTPServiceDAO {
 		} finally {
 			try {
 				httpclient.getConnectionManager().shutdown();
-			} catch (Exception ignore) {
+			} catch (final Exception ignore) {
 			}
 		}
 	}
@@ -160,36 +167,36 @@ public class HTTPServiceDAO {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	public byte[] postFile(String url, String fileAttr, File file)
-			throws ClientProtocolException, IOException,
+	public byte[] postFile(final String url, final String fileAttr,
+			final File file) throws ClientProtocolException, IOException,
 			AuthenticationException {
-		log.debug("postFile");
-		DefaultHttpClient httpclient = new DefaultHttpClient();
+		this.log.debug("postFile");
+		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		try {
-			HttpPost httppost = new HttpPost(url);
+			final HttpPost httppost = new HttpPost(url);
 
 			httppost.addHeader(new BasicScheme().authenticate(
-					new UsernamePasswordCredentials(config.getUser(), config
-							.getPassword()), httppost));
+					new UsernamePasswordCredentials(this.config.getUser(),
+							this.config.getPassword()), httppost));
 
-			FileBody fileBody = new FileBody(file);
-			log.debug("Posting file: " + file.getAbsolutePath());
-			log.debug("Post URL: " + url);
+			final FileBody fileBody = new FileBody(file);
+			this.log.debug("Posting file: " + file.getAbsolutePath());
+			this.log.debug("Post URL: " + url);
 
-			MultipartEntity reqEntity = new MultipartEntity();
+			final MultipartEntity reqEntity = new MultipartEntity();
 			reqEntity.addPart(fileAttr, fileBody);
 
 			httppost.setEntity(reqEntity);
 
-			log.debug("executing request " + httppost.getRequestLine());
-			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity resEntity = response.getEntity();
+			this.log.debug("executing request " + httppost.getRequestLine());
+			final HttpResponse response = httpclient.execute(httppost);
+			final HttpEntity resEntity = response.getEntity();
 
-			log.debug("Recieving response");
+			this.log.debug("Recieving response");
 			if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
 				return EntityUtils.toByteArray(resEntity);
 			} else {
-				log.debug(EntityUtils.toString(resEntity));
+				this.log.debug(EntityUtils.toString(resEntity));
 				throw new IOException("Invalid response: "
 						+ response.getStatusLine().getStatusCode() + " "
 						+ response.getStatusLine().getReasonPhrase());
@@ -197,7 +204,7 @@ public class HTTPServiceDAO {
 		} finally {
 			try {
 				httpclient.getConnectionManager().shutdown();
-			} catch (Exception ignore) {
+			} catch (final Exception ignore) {
 			}
 		}
 	}

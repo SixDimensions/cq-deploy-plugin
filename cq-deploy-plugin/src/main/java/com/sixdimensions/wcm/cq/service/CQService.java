@@ -43,8 +43,8 @@ public interface CQService {
 		 *            Service.
 		 * @return the instance of the Package Manager Service
 		 */
-		public static CQService getService(CQServiceConfig config) {
-			CQService svc = new CQWebDavService(config);
+		public static CQService getService(final CQServiceConfig config) {
+			final CQService svc = new CQWebDavService(config);
 			return svc;
 		}
 	}

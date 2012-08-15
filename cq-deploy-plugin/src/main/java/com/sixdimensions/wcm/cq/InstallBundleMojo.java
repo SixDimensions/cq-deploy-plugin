@@ -70,42 +70,43 @@ public class InstallBundleMojo extends AbstractCQMojo {
 	 * @see org.apache.maven.plugin.AbstractMojo#execute()
 	 */
 	public void execute() throws MojoExecutionException {
-		getLog().info("execute");
+		this.getLog().info("execute");
 
-		if (!skipInstall) {
-			getLog().info("Initializing");
+		if (!this.skipInstall) {
+			this.getLog().info("Initializing");
 
 			if (this.getPath().contains("${app.name}")) {
-				getLog().debug("No app name set, using /apps/bundles/install");
+				this.getLog().debug(
+						"No app name set, using /apps/bundles/install");
 				this.setPath(this.getPath().replace("${app.name}", "bundles"));
 			}
-			CQServiceConfig config = new CQServiceConfig();
-			initConfig(config);
+			final CQServiceConfig config = new CQServiceConfig();
+			this.initConfig(config);
 
-			getLog().info(
+			this.getLog().info(
 					"Connecting to server: " + config.getHost() + ":"
 							+ config.getPort());
-			getLog().info("Connecting with user: " + config.getUser());
-			CQService cqSvc = CQService.Factory.getService(config);
+			this.getLog().info("Connecting with user: " + config.getUser());
+			final CQService cqSvc = CQService.Factory.getService(config);
 
 			try {
-				getLog().info("Creating folders: " + path);
-				cqSvc.createFolder(path);
+				this.getLog().info("Creating folders: " + this.path);
+				cqSvc.createFolder(this.path);
 
-				getLog().info(
-						"Uploading bundle " + bundleFile.getAbsolutePath()
-								+ " to path " + path);
-				cqSvc.uploadFile(bundleFile, path);
+				this.getLog().info(
+						"Uploading bundle " + this.bundleFile.getAbsolutePath()
+								+ " to path " + this.path);
+				cqSvc.uploadFile(this.bundleFile, this.path);
 
-				getLog().info("Bundle installation complete");
-			} catch (Exception e) {
-				getLog().error("Exeption installing bundle: " + e.getMessage(),
-						e);
+				this.getLog().info("Bundle installation complete");
+			} catch (final Exception e) {
+				this.getLog().error(
+						"Exeption installing bundle: " + e.getMessage(), e);
 				throw new MojoExecutionException("Exception installing bundle",
 						e);
 			}
 		} else {
-			getLog().info("Skipping installation");
+			this.getLog().info("Skipping installation");
 		}
 	}
 
@@ -115,7 +116,7 @@ public class InstallBundleMojo extends AbstractCQMojo {
 	 * @return the bundle file to be installed
 	 */
 	public File getBundleFile() {
-		return bundleFile;
+		return this.bundleFile;
 	}
 
 	/**
@@ -124,7 +125,7 @@ public class InstallBundleMojo extends AbstractCQMojo {
 	 * @return the path inside the JCR to which to install the bundle
 	 */
 	public String getPath() {
-		return path;
+		return this.path;
 	}
 
 	/**
@@ -134,7 +135,7 @@ public class InstallBundleMojo extends AbstractCQMojo {
 	 * @return the skip installation flag value
 	 */
 	public boolean getSkipInstall() {
-		return skipInstall;
+		return this.skipInstall;
 	}
 
 	/**
@@ -143,7 +144,7 @@ public class InstallBundleMojo extends AbstractCQMojo {
 	 * @param bundleFile
 	 *            the bundle file to load and install
 	 */
-	public void setBundleFile(File bundleFile) {
+	public void setBundleFile(final File bundleFile) {
 		this.bundleFile = bundleFile;
 	}
 
@@ -153,7 +154,7 @@ public class InstallBundleMojo extends AbstractCQMojo {
 	 * @param path
 	 *            the path in the JCR in which the bundle will be loaded.
 	 */
-	public void setPath(String path) {
+	public void setPath(final String path) {
 		this.path = path;
 	}
 
@@ -164,7 +165,7 @@ public class InstallBundleMojo extends AbstractCQMojo {
 	 * @param skipInstall
 	 *            the skip installation flag
 	 */
-	public void setSkipInstall(boolean skipInstall) {
+	public void setSkipInstall(final boolean skipInstall) {
 		this.skipInstall = skipInstall;
 	}
 

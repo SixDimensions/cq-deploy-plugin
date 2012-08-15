@@ -18,17 +18,28 @@ package com.sixdimensions.wcm.cq.dao.webdav;
 
 import org.apache.commons.httpclient.HttpMethodBase;
 
-/** Allows any HTTP method for HtttpClient */
+/**
+ * Allows any HTTP method for HttpClient.
+ * 
+ */
 public class HttpAnyMethod extends HttpMethodBase {
-    private final String methodName;
-    
-    public HttpAnyMethod(String methodName, String uri) {
-        super(uri);
-        this.methodName = methodName;
-    }
+	private final String methodName;
 
-    @Override
-    public String getName() {
-        return methodName;
-    }
+	/**
+	 * Construct a new HTTPAnyMethod instance.
+	 * 
+	 * @param methodName
+	 *            the name of the method to create
+	 * @param uri
+	 *            the uri for the method
+	 */
+	public HttpAnyMethod(final String methodName, final String uri) {
+		super(uri);
+		this.methodName = methodName;
+	}
+
+	@Override
+	public String getName() {
+		return this.methodName;
+	}
 }

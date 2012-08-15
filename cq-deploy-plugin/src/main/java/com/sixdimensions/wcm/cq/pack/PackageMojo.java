@@ -111,73 +111,74 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 	 * @see org.apache.maven.plugin.AbstractMojo#execute()
 	 */
 	public void execute() throws MojoExecutionException {
-		getLog().info("execute");
+		this.getLog().info("execute");
 
-		PackageManagerConfig config = new PackageManagerConfig();
-		initConfig(config);
+		final PackageManagerConfig config = new PackageManagerConfig();
+		this.initConfig(config);
 
-		getLog().info(
+		this.getLog().info(
 				"Connecting to server: " + config.getHost() + ":"
 						+ config.getPort());
-		getLog().info("Connecting with user: " + config.getUser());
+		this.getLog().info("Connecting with user: " + config.getUser());
 
-		getLog().debug("Retrieving service");
-		PackageManagerService packageMgrSvc = PackageManagerService.Factory
+		this.getLog().debug("Retrieving service");
+		final PackageManagerService packageMgrSvc = PackageManagerService.Factory
 				.getPackageMgr(config);
 
 		String packagePath = this.path;
 		if (config.isUseLegacy()) {
-			getLog().debug(
+			this.getLog().debug(
 					"Checking path: " + packagePath
 							+ " for compatibility with legacy API");
-			MavenProject project = (MavenProject) this.getPluginContext().get(
-					"project");
-			if (path.equals(project.getArtifactId() + "-"
+			final MavenProject project = (MavenProject) this.getPluginContext()
+					.get("project");
+			if (this.path.equals(project.getArtifactId() + "-"
 					+ project.getVersion() + "." + project.getPackaging())) {
-				getLog().debug("Updating path for legacy API");
+				this.getLog().debug("Updating path for legacy API");
 				packagePath = project.getArtifactId();
 			} else {
-				getLog().debug("Custom path specified, not modifying");
+				this.getLog().debug("Custom path specified, not modifying");
 			}
 		}
 		try {
-			if (deleteFirst) {
+			if (this.deleteFirst) {
 				try {
 					packageMgrSvc.delete(packagePath);
-				} catch (Exception e) {
-					getLog().warn(
-							"Exception deleting existing package, continuing with installation.",
-							e);
+				} catch (final Exception e) {
+					this.getLog()
+							.warn("Exception deleting existing package, continuing with installation.",
+									e);
 				}
 			}
-			packageMgrSvc.upload(packagePath, packageFile);
-			getLog().info("Package upload successful");
+			packageMgrSvc.upload(packagePath, this.packageFile);
+			this.getLog().info("Package upload successful");
 			if (!this.uploadOnly) {
 				packageMgrSvc.install(packagePath);
-				getLog().info("Package installation successful");
+				this.getLog().info("Package installation successful");
 			}
-		} catch (Exception e) {
-			getLog().error("Exception uploading/installing package.", e);
+		} catch (final Exception e) {
+			this.getLog().error("Exception uploading/installing package.", e);
 			throw new MojoExecutionException(
 					"Exception uploading/installing package.", e);
 		}
-		getLog().info("Package Upload/Installation Completed Successfully");
+		this.getLog()
+				.info("Package Upload/Installation Completed Successfully");
 	}
 
 	public String getAcHandling() {
-		return acHandling;
+		return this.acHandling;
 	}
 
 	public int getAutosave() {
-		return autosave;
+		return this.autosave;
 	}
 
 	public File getPackageFile() {
-		return packageFile;
+		return this.packageFile;
 	}
 
 	public String getPath() {
-		return path;
+		return this.path;
 	}
 
 	/*
@@ -187,15 +188,16 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 	 * com.sixdimensions.wcm.cq.AbstractCQMojo#initConfig(com.sixdimensions.
 	 * wcm.cq.service.CQServiceConfig)
 	 */
-	protected void initConfig(CQServiceConfig cfg) {
+	@Override
+	protected void initConfig(final CQServiceConfig cfg) {
 		super.initConfig(cfg);
-		PackageManagerConfig config = (PackageManagerConfig) cfg;
-		if (this.getAcHandling() != null
-				&& this.getAcHandling().trim().length() > 0) {
+		final PackageManagerConfig config = (PackageManagerConfig) cfg;
+		if ((this.getAcHandling() != null)
+				&& (this.getAcHandling().trim().length() > 0)) {
 			try {
 				config.setAcHandling(AC_HANDLING.valueOf(this.getAcHandling()));
-			} catch (IllegalArgumentException iae) {
-				getLog().info(
+			} catch (final IllegalArgumentException iae) {
+				this.getLog().info(
 						"Unable to parse Access Control Handler from: "
 								+ this.getAcHandling() + " using default");
 				config.setAcHandling(AC_HANDLING.DEFAULT);
@@ -203,54 +205,54 @@ public class PackageMojo extends AbstractCQMojo implements Mojo {
 		}
 		config.setRecursive(this.isRecursive());
 		config.setAutosave(this.getAutosave());
-		config.setUseLegacy(useLegacy);
+		config.setUseLegacy(this.useLegacy);
 	}
 
 	public boolean isDeleteFirst() {
-		return deleteFirst;
+		return this.deleteFirst;
 	}
 
 	public boolean isRecursive() {
-		return recursive;
+		return this.recursive;
 	}
 
 	public boolean isUploadOnly() {
-		return uploadOnly;
+		return this.uploadOnly;
 	}
 
 	public boolean isUseLegacy() {
-		return useLegacy;
+		return this.useLegacy;
 	}
 
-	public void setAcHandling(String acHandling) {
+	public void setAcHandling(final String acHandling) {
 		this.acHandling = acHandling;
 	}
 
-	public void setAutosave(int autosave) {
+	public void setAutosave(final int autosave) {
 		this.autosave = autosave;
 	}
 
-	public void setDeleteFirst(boolean deleteFirst) {
+	public void setDeleteFirst(final boolean deleteFirst) {
 		this.deleteFirst = deleteFirst;
 	}
 
-	public void setPackageFile(File packageFile) {
+	public void setPackageFile(final File packageFile) {
 		this.packageFile = packageFile;
 	}
 
-	public void setPath(String path) {
+	public void setPath(final String path) {
 		this.path = path;
 	}
 
-	public void setRecursive(boolean recursive) {
+	public void setRecursive(final boolean recursive) {
 		this.recursive = recursive;
 	}
 
-	public void setUploadOnly(boolean uploadOnly) {
+	public void setUploadOnly(final boolean uploadOnly) {
 		this.uploadOnly = uploadOnly;
 	}
 
-	public void setUseLegacy(boolean useLegacy) {
+	public void setUseLegacy(final boolean useLegacy) {
 		this.useLegacy = useLegacy;
 	}
 }

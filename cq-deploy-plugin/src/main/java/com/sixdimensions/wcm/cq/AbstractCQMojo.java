@@ -73,7 +73,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @return the host
 	 */
 	public final String getHost() {
-		return host;
+		return this.host;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @return the password
 	 */
 	public final String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	/**
@@ -91,7 +91,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @return the server port to connect to
 	 */
 	public final String getPort() {
-		return port;
+		return this.port;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @return the username
 	 */
 	public final String getUser() {
-		return user;
+		return this.user;
 	}
 
 	/**
@@ -110,15 +110,15 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @param config
 	 *            the configuration object to configure
 	 */
-	protected void initConfig(CQServiceConfig config) {
-		getLog().debug("Instantiating configuration object.");
+	protected void initConfig(final CQServiceConfig config) {
+		this.getLog().debug("Instantiating configuration object.");
 
-		config.setErrorOnFailure(errorOnFailure);
-		config.setHost(host);
-		config.setLog(getLog());
-		config.setPassword(password);
-		config.setPort(port);
-		config.setUser(user);
+		config.setErrorOnFailure(this.errorOnFailure);
+		config.setHost(this.host);
+		config.setLog(this.getLog());
+		config.setPassword(this.password);
+		config.setPort(this.port);
+		config.setUser(this.user);
 	}
 
 	/**
@@ -128,7 +128,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @return the error on failure flag
 	 */
 	public final boolean isErrorOnFailure() {
-		return errorOnFailure;
+		return this.errorOnFailure;
 	}
 
 	/**
@@ -138,7 +138,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @param errorOnFailure
 	 *            the error on failure flag
 	 */
-	public final void setErrorOnFailure(boolean errorOnFailure) {
+	public final void setErrorOnFailure(final boolean errorOnFailure) {
 		this.errorOnFailure = errorOnFailure;
 	}
 
@@ -149,7 +149,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @param host
 	 *            the host to connect to
 	 */
-	public void setHost(String host) {
+	public void setHost(final String host) {
 		this.host = host;
 	}
 
@@ -159,7 +159,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @param password
 	 *            the password
 	 */
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -170,7 +170,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @param port
 	 *            the port to connect to
 	 */
-	public void setPort(String port) {
+	public void setPort(final String port) {
 		this.port = port;
 	}
 
@@ -180,7 +180,7 @@ public abstract class AbstractCQMojo extends AbstractMojo {
 	 * @param user
 	 *            the username
 	 */
-	public void setUser(String user) {
+	public void setUser(final String user) {
 		this.user = user;
 	}
 }

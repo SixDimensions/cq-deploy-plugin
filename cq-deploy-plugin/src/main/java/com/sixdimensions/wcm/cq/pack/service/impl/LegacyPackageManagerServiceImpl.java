@@ -69,7 +69,7 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		 *            the string representation of the command for this COMMAND
 		 *            instance
 		 */
-		COMMAND(String cmd) {
+		COMMAND(final String cmd) {
 			this.cmd = cmd;
 		}
 
@@ -79,23 +79,60 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 		 * @return the service command string
 		 */
 		public String getCmd() {
-			return cmd;
+			return this.cmd;
 		}
 	}
 
+	/**
+	 * Constant for the file key.
+	 */
 	private static final String FILE_KEY = "file";
-	private static final String COMMAND_KEY = "?cmd=";
-	private static final String GROUP_KEY = "&group=";
-	private static final String NAME_KEY = "&name=";
-	private static final String SERVICE_PATH = "/crx/packmgr/service.jsp";
-	private PackageManagerConfig config;
-	private Log log;
-	private HTTPServiceDAO pmAPI;
 
-	public LegacyPackageManagerServiceImpl(PackageManagerConfig config) {
-		log = config.getLog();
+	/**
+	 * Constant for the command key
+	 */
+	private static final String COMMAND_KEY = "?cmd=";
+
+	/**
+	 * Constant for the package group key
+	 */
+	private static final String GROUP_KEY = "&group=";
+
+	/**
+	 * Constant for the package name key.
+	 */
+	private static final String NAME_KEY = "&name=";
+
+	/**
+	 * Constant for the service relative path.
+	 */
+	private static final String SERVICE_PATH = "/crx/packmgr/service.jsp";
+
+	/**
+	 * The configuration for this instance of the service.
+	 */
+	private final PackageManagerConfig config;
+
+	/**
+	 * The logger for this class.
+	 */
+	private final Log log;
+
+	/**
+	 * The DAO used to interact with the service.
+	 */
+	private final HTTPServiceDAO pmAPI;
+
+	/**
+	 * Construct a new legacy package manager service.
+	 * 
+	 * @param config
+	 *            the configuration to use
+	 */
+	public LegacyPackageManagerServiceImpl(final PackageManagerConfig config) {
+		this.log = config.getLog();
 		this.config = config;
-		pmAPI = new HTTPServiceDAO(config);
+		this.pmAPI = new HTTPServiceDAO(config);
 	}
 
 	/**
@@ -103,17 +140,20 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * command to execute.
 	 * 
 	 * @param path
+	 *            the path of the package
 	 * @param command
-	 * @return
+	 *            the command being executed
+	 * @return the url to execute
 	 */
-	private String assembleUrl(String path, COMMAND command) {
-		log.debug("assembleUrl");
-		String url = config.getHost() + ":" + config.getPort() + SERVICE_PATH;
+	private String assembleUrl(final String path, final COMMAND command) {
+		this.log.debug("assembleUrl");
+		String url = this.config.getHost() + ":" + this.config.getPort()
+				+ SERVICE_PATH;
 		url += COMMAND_KEY + command.getCmd();
 
 		if (path.contains("/")) {
-			String name = path.substring(path.indexOf("/") + 1);
-			String group = path.substring(0, path.indexOf("/"));
+			final String name = path.substring(path.indexOf("/") + 1);
+			final String group = path.substring(0, path.indexOf("/"));
 			url += NAME_KEY + name + GROUP_KEY + group;
 		} else {
 			url += NAME_KEY + path;
@@ -128,20 +168,21 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#delete(java
 	 * .lang.String)
 	 */
-	public void delete(String path) throws Exception {
-		log.debug("delete");
+	public void delete(final String path) throws Exception {
+		this.log.debug("delete");
 
-		log.info("Deleting package at path: " + path);
+		this.log.info("Deleting package at path: " + path);
 
-		byte[] result = pmAPI.doGet(assembleUrl(path, COMMAND.DELETE));
+		final byte[] result = this.pmAPI.doGet(this.assembleUrl(path,
+				COMMAND.DELETE));
 
-		log.debug("Result of command: " + new String(result, "UTF-8"));
+		this.log.debug("Result of command: " + new String(result, "UTF-8"));
 
-		Response response = parseResponse(result);
-		if (!response.isSucceeded() && config.isErrorOnFailure()) {
+		final Response response = this.parseResponse(result);
+		if (!response.isSucceeded() && this.config.isErrorOnFailure()) {
 			if (path.endsWith(".jar")) {
-				log.warn("Delete failed with jar, trying with zip.");
-				delete(path.replace(".jar", ".zip"));
+				this.log.warn("Delete failed with jar, trying with zip.");
+				this.delete(path.replace(".jar", ".zip"));
 			} else {
 				throw new Exception("Failed to delete package, code: "
 						+ response.getCode() + " message: "
@@ -157,7 +198,7 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#dryRun(java
 	 * .lang.String)
 	 */
-	public void dryRun(String path) throws Exception {
+	public void dryRun(final String path) throws Exception {
 		throw new Exception("Dry Run is not supported in Legacy API");
 	}
 
@@ -168,20 +209,21 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#install(java
 	 * .lang.String)
 	 */
-	public void install(String path) throws Exception {
-		log.debug("install");
+	public void install(final String path) throws Exception {
+		this.log.debug("install");
 
-		log.info("Installing package at path: " + path);
+		this.log.info("Installing package at path: " + path);
 
-		byte[] result = pmAPI.doGet(assembleUrl(path, COMMAND.INSTALL));
+		final byte[] result = this.pmAPI.doGet(this.assembleUrl(path,
+				COMMAND.INSTALL));
 
-		log.debug("Result of command: " + new String(result, "UTF-8"));
-		Response response = parseResponse(result);
+		this.log.debug("Result of command: " + new String(result, "UTF-8"));
+		final Response response = this.parseResponse(result);
 
-		if (!response.isSucceeded() && config.isErrorOnFailure()) {
+		if (!response.isSucceeded() && this.config.isErrorOnFailure()) {
 			if (path.endsWith(".jar")) {
-				log.warn("Install failed with jar, trying with zip.");
-				install(path.replace(".jar", ".zip"));
+				this.log.warn("Install failed with jar, trying with zip.");
+				this.install(path.replace(".jar", ".zip"));
 			} else {
 				throw new Exception("Failed to install package, code: "
 						+ response.getCode() + " message: "
@@ -201,20 +243,20 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * @throws IOException
 	 * @throws ParserConfigurationException
 	 */
-	private Response parseResponse(byte[] response)
+	private Response parseResponse(final byte[] response)
 			throws XPathExpressionException, IOException,
 			ParserConfigurationException {
-		log.debug("parseResponse");
+		this.log.debug("parseResponse");
 
 		Response responseObj = null;
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory
+			final DocumentBuilderFactory factory = DocumentBuilderFactory
 					.newInstance();
 			factory.setNamespaceAware(true); // never forget this!
-			Document doc = factory.newDocumentBuilder().parse(
+			final Document doc = factory.newDocumentBuilder().parse(
 					new ByteArrayInputStream(response));
 
-			XPath xpath = XPathFactory.newInstance().newXPath();
+			final XPath xpath = XPathFactory.newInstance().newXPath();
 
 			// Sample response
 			//
@@ -228,42 +270,43 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 			// </response>
 			// </crx>
 
-			log.debug("Parsing response code");
-			XPathExpression codeXpr = xpath
+			this.log.debug("Parsing response code");
+			final XPathExpression codeXpr = xpath
 					.compile("/crx/response/status/@code");
 			int responseCode = -1;
 			try {
 				responseCode = Integer.parseInt(((NodeList) codeXpr.evaluate(
 						doc, XPathConstants.NODESET)).item(0).getNodeValue(),
 						10);
-			} catch (NumberFormatException nfe) {
-				log.warn("Unable to parse "
+			} catch (final NumberFormatException nfe) {
+				this.log.warn("Unable to parse "
 						+ ((NodeList) codeXpr.evaluate(doc,
 								XPathConstants.NODESET)).item(0).getNodeValue()
 						+ " as a number");
 			}
 
-			log.debug("Parsing response message");
-			XPathExpression messageXpr = xpath.compile("/crx/response/status");
-			String responseMessage = ((NodeList) messageXpr.evaluate(doc,
+			this.log.debug("Parsing response message");
+			final XPathExpression messageXpr = xpath
+					.compile("/crx/response/status");
+			final String responseMessage = ((NodeList) messageXpr.evaluate(doc,
 					XPathConstants.NODESET)).item(0).getChildNodes().item(0)
 					.getNodeValue();
 
 			responseObj = new Response(HttpStatus.SC_OK == responseCode,
 					responseCode, responseMessage);
-			log.debug("Response Code: " + responseCode);
+			this.log.debug("Response Code: " + responseCode);
 			if (HttpStatus.SC_OK == responseCode) {
-				log.debug("Response Message: " + responseMessage);
+				this.log.debug("Response Message: " + responseMessage);
 			} else {
-				log.warn("Error Message: " + responseMessage);
+				this.log.warn("Error Message: " + responseMessage);
 			}
-		} catch (SAXException se) {
-			String message = "Exception parsing XML response, assuming failure.  "
+		} catch (final SAXException se) {
+			final String message = "Exception parsing XML response, assuming failure.  "
 					+ "This often occurs when an invalid XML file is uploaded as the error message "
 					+ "is not properly escaped in the response.";
-			log.warn(message, se);
-			log.warn("Response contents: " + new String(response, "utf-8"));
-			responseObj = new Response(false,500,message);
+			this.log.warn(message, se);
+			this.log.warn("Response contents: " + new String(response, "utf-8"));
+			responseObj = new Response(false, 500, message);
 		}
 
 		return responseObj;
@@ -276,19 +319,19 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
 	 * com.sixdimensions.wcm.cq.pack.service.PackageManagerService#upload(java
 	 * .lang.String, java.io.File)
 	 */
-	public void upload(String path, File pkg) throws Exception {
-		log.debug("install");
+	public void upload(final String path, final File pkg) throws Exception {
+		this.log.debug("install");
 
-		log.info("Uploading package " + pkg.getAbsolutePath() + " to path: "
-				+ path);
+		this.log.info("Uploading package " + pkg.getAbsolutePath()
+				+ " to path: " + path);
 
-		byte[] result = pmAPI.postFile(assembleUrl(path, COMMAND.UPLOAD),
-				FILE_KEY, pkg);
+		final byte[] result = this.pmAPI.postFile(
+				this.assembleUrl(path, COMMAND.UPLOAD), FILE_KEY, pkg);
 
-		log.debug("Result of command: " + new String(result, "UTF-8"));
+		this.log.debug("Result of command: " + new String(result, "UTF-8"));
 
-		Response response = parseResponse(result);
-		if (!response.isSucceeded() && config.isErrorOnFailure()) {
+		final Response response = this.parseResponse(result);
+		if (!response.isSucceeded() && this.config.isErrorOnFailure()) {
 			throw new Exception("Failed to upload package, code: "
 					+ response.getCode() + " message: " + response.getMessage());
 		}
@@ -301,8 +344,8 @@ public class LegacyPackageManagerServiceImpl implements PackageManagerService {
  * @author klcodanr
  */
 class Response {
-	private int code;
-	private String message;
+	private final int code;
+	private final String message;
 	boolean succeeded;
 
 	/**
@@ -317,22 +360,23 @@ class Response {
 	 *            the message returned by the server usually either 'ok' or some
 	 *            sort of error
 	 */
-	protected Response(boolean succeeded, int code, String message) {
+	protected Response(final boolean succeeded, final int code,
+			final String message) {
 		this.succeeded = succeeded;
 		this.code = code;
 		this.message = message;
 	}
 
 	public int getCode() {
-		return code;
+		return this.code;
 	}
 
 	public String getMessage() {
-		return message;
+		return this.message;
 	}
 
 	public boolean isSucceeded() {
-		return succeeded;
+		return this.succeeded;
 	}
 
 }
