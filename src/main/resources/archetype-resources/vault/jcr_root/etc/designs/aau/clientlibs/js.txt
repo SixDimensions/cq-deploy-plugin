@@ -1,7 +1,0 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
-js/jquery-1.6.1.min.js
-jwplayer5/jwplayer.js
-jwplayer5/jquery.jwbox.js
-js/shadowbox.js
