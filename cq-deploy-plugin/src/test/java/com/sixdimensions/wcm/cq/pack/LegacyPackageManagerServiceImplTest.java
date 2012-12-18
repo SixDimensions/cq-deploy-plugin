@@ -1,9 +1,8 @@
 package com.sixdimensions.wcm.cq.pack;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URLDecoder;
 
 import org.apache.maven.plugin.logging.Log;
@@ -19,95 +18,99 @@ import com.sixdimensions.wcm.cq.service.CQService;
 public class LegacyPackageManagerServiceImplTest {
 
 	private PackageManagerService packageManagerSvc;
-	private Log log = new SystemStreamLog();
+	private final Log log = new SystemStreamLog();
 	private boolean executeTests = true;
 
 	@Before
 	public void init() {
-		log.info("Init");
+		this.log.info("Init");
 
-		PackageManagerConfig config = new PackageManagerConfig();
+		final PackageManagerConfig config = new PackageManagerConfig();
 		config.setHost("http://localhost");
 		config.setPort("4502");
 		config.setUseLegacy(true);
 		config.setUser("admin");
 		config.setPassword("admin");
 		config.setErrorOnFailure(true);
-		config.setLog(log);
+		config.setLog(this.log);
 		config.setAcHandling(AC_HANDLING.valueOf("ignore"));
 
-		log.debug("Verifying authentication");
-		CQService cqSvc = CQService.Factory.getService(config);
+		this.log.debug("Verifying authentication");
+		final CQService cqSvc = CQService.Factory.getService(config);
 		try {
 			cqSvc.createFolder("/apps");
-		} catch (Exception e) {
-			log.warn("Authentication failed, skipping tests");
-			executeTests = false;
+		} catch (final Exception e) {
+			this.log.warn("Authentication failed, skipping tests");
+			this.executeTests = false;
 		}
 
-		packageManagerSvc = PackageManagerService.Factory.getPackageMgr(config);
-		log.info("Init Complete");
-	}
-
-	@Test
-	public void testUpload() throws Exception {
-		log.info("Testing Upload");
-		if (executeTests) {
-			File f = new File(URLDecoder.decode(getClass().getClassLoader()
-					.getResource("test-1.0.0.zip").getPath(), "UTF-8"));
-			packageManagerSvc.upload("test/test", f);
-		}
-	}
-
-	@Test
-	public void testInstall() throws Exception {
-		log.info("Testing Install");
-		if (executeTests) {
-			packageManagerSvc.install("test/test");
-			try {
-				packageManagerSvc.install("my_packages/does-not-exist.zip");
-				fail("Exception expected");
-			} catch (Exception re) {
-				log.info("Exception caught as expected");
-			}
-			packageManagerSvc.install("test/test");
-		}
+		this.packageManagerSvc = PackageManagerService.Factory
+				.getPackageMgr(config);
+		this.log.info("Init Complete");
 	}
 
 	@Test
 	public void testDelete() throws Exception {
-		log.info("Testing Delete");
-		if (executeTests) {
-			packageManagerSvc.delete("test/test");
+		this.log.info("Testing Delete");
+		if (this.executeTests) {
+			this.packageManagerSvc.delete("test/test");
 			try {
-				packageManagerSvc.delete("my_packages/does-not-exist.zip");
+				this.packageManagerSvc.delete("my_packages/does-not-exist.zip");
 				fail("Exception expected");
-			} catch (Exception re) {
-				log.info("Exception caught as expected");
+			} catch (final Exception re) {
+				this.log.info("Exception caught as expected");
 			}
 		}
 	}
 
 	@Test
 	public void testFailures() throws Exception {
-	
-		log.info("Testing failures");
-	
-		String[] failures = new String[] { "test-bad-zip.zip",
+
+		this.log.info("Testing failures");
+
+		final String[] failures = new String[] { "test-bad-zip.zip",
 				"test-not-package.zip", "test-bad-file.zip" };
-		for (String failure : failures) {
+		for (final String failure : failures) {
 			try {
-				log.info("Testing " + failure);
-				File f = new File(URLDecoder.decode(getClass().getClassLoader()
-						.getResource(failure).getPath(), "UTF-8"));
-				packageManagerSvc.upload("test/" + failure, f);
-				packageManagerSvc.install(failure.replace(".zip", ""));
-			} catch (Exception e) {
-				log.error(e);
+				this.log.info("Testing " + failure);
+				final File f = new File(URLDecoder.decode(this.getClass()
+						.getClassLoader().getResource(failure).getPath(),
+						"UTF-8"));
+				this.packageManagerSvc.upload("test/" + failure, f);
+				this.packageManagerSvc.install(failure.replace(".zip", ""));
+			} catch (final Exception e) {
+				this.log.error(e);
 			}
 		}
-		
-		log.info("Test Successful");
+
+		this.log.info("Test Successful");
+	}
+
+	@Test
+	public void testInstall() throws Exception {
+		this.log.info("Testing Install");
+		if (this.executeTests) {
+			this.packageManagerSvc.install("test/test");
+			try {
+				this.packageManagerSvc
+						.install("my_packages/does-not-exist.zip");
+				fail("Exception expected");
+			} catch (final Exception re) {
+				this.log.info("Exception caught as expected");
+			}
+			this.packageManagerSvc.install("test/test");
+		}
+	}
+
+	@Test
+	public void testUpload() throws Exception {
+		this.log.info("Testing Upload");
+		if (this.executeTests) {
+			final File f = new File(URLDecoder.decode(this.getClass()
+					.getClassLoader().getResource("test-1.0.0.zip").getPath(),
+					"UTF-8"));
+			this.packageManagerSvc.upload("test/test", f);
+		}
 	}
 
 }
