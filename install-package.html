@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CQ Deploy Plugin :: Introduction</title>
+    <title>CQ Deploy Plugin :: Goals :: install-package</title>
     <link rel="stylesheet" href="./css/apache-maven-fluido.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -30,7 +30,7 @@
 				} catch(err) {}</script>
           
       <meta name="author" content="Dan Klco" />
-    <meta name="Date-Creation-yyyymmdd" content="20120802" />
+    <meta name="Date-Creation-yyyymmdd" content="20121218" />
     <meta name="Date-Revision-yyyymmdd" content="20121218" />
     <meta http-equiv="Content-Language" content="en" />
     
@@ -72,8 +72,8 @@
                                     <h3>Overview</h3>
                   <ul>
                   <li class="none">
-            <strong>Introduction</strong>
-          </li>
+                          <a href="index.html" title="Introduction">Introduction</a>
+            </li>
           </ul>
                         <h3>Goals</h3>
                   <ul>
@@ -81,31 +81,17 @@
                           <a href="goals.html" title="Goals">Goals</a>
             </li>
                   <li class="none">
-                          <a href="install-package.html" title="install-package">install-package</a>
-            </li>
+            <strong>install-package</strong>
+          </li>
                   <li class="none">
                           <a href="install-bundle.html" title="install-bundle">install-bundle</a>
             </li>
           </ul>
                         <h3>Project Documentation</h3>
                   <ul>
-                                                                                                                                    <li class="expanded">
+                                                                                                                          <li class="collapsed">
                           <a href="project-info.html" title="Project Information">Project Information</a>
-                    <ul>
-                      <li class="none">
-            <strong>About</strong>
-          </li>
-                      <li class="none">
-                          <a href="project-summary.html" title="Project Summary">Project Summary</a>
-            </li>
-                      <li class="none">
-                          <a href="license.html" title="Project License">Project License</a>
-            </li>
-                      <li class="none">
-                          <a href="dependencies.html" title="Dependencies">Dependencies</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                                         <li class="collapsed">
                           <a href="project-reports.html" title="Project Reports">Project Reports</a>
                   </li>
@@ -143,7 +129,24 @@
         
         <div id="bodyColumn"  class="span9" >
                                   
-            <div class="section"><h2>Adobe CQ Deploy Plugin<a name="Adobe_CQ_Deploy_Plugin"></a></h2><p>Maven Plugin for installing CQ Packages and Bundles into CQ repositories using the Package Manager and Java Content Repository APIs. This plugin replaces fragile cURL or Groovy invocations with a reliable Java-based library and provides a consistent and compatible way of deploying bundles and packages.</p><div class="section"><h3>Compatibility<a name="Compatibility"></a></h3><p>The Adobe CQ Deploy Plugin is compatible with:</p><ul><li>Apache Maven 2.0+</li><li>Adobe CQ 5.2 - 5.5</li><li>Java 1.5+</li></ul></div><div class="section"><h3>Goals Overview<a name="Goals_Overview"></a></h3><ul><li><a href="./install-package.html">install-package</a> installs the package into the CQ Repository.</li><li><a href="./install-bundle.html">install-bundle</a> installs a bundle into the CQ Repository.</li></ul></div><div class="section"><h3>Usage<a name="Usage"></a></h3><p>General instructions on how to use the Adobe CQ Deploy Plugin can be found on the <a href="./goals.html">goals page</a>. Some more specific use cases are described in the examples given below.</p></div></div>
+            <div class="section"><h2>install-package<a name="install-package"></a></h2><p>This goal is used to upload and install Adobe CQ packages into a CQ repository.</p><div class="section"><h3>How to use install a package with the CQ Deploy Plugin<a name="How_to_use_install_a_package_with_the_CQ_Deploy_Plugin"></a></h3><p>The Adobe CQ Deploy Plugin can be used to install a package by adding the following plugin into your POM. In most cases the default configuration values will suffice for developer deployments, however a number of optional configuration values are also provided for more advanced deployments.</p><div><pre>
+&lt;plugin&gt;
+        &lt;groupId&gt;com.sixdimensions.wcm.cq&lt;/groupId&gt;
+        &lt;artifactId&gt;cq-deploy-plugin&lt;/artifactId&gt;
+        &lt;version&gt;0.1.8&lt;/version&gt;
+        &lt;executions&gt;
+                &lt;execution&gt;
+                        &lt;id&gt;install-package&lt;/id&gt;
+                        &lt;goals&gt;
+                                &lt;goal&gt;install-package&lt;/goal&gt;
+                        &lt;/goals&gt;
+                        &lt;configuration&gt;
+                                [...]
+                        &lt;/configuration&gt;
+                &lt;/execution&gt;
+        &lt;/executions&gt;
+&lt;/plugin&gt;
+</pre></div></div><div class="section"><h3>Configuration Values<a name="Configuration_Values"></a></h3><p>The configuration values below can be used to further configure the CQ Package Manager. In most cases they will not be required.</p><p><b>deleteFirst</b></p><p>Flag to determine whether or not to first delete the package before uploading. Default is false.</p><p><b>errorOnFailure</b></p><p>Flag to determine whether or not to quit and throw an error when an API call fails. Default is true.</p><p><b>host</b></p><p>The host of the server to connect to, including protocol. Default is 'http://localhost'.</p><p><b>packageFile</b></p><p>Location of the file. Default is &quot;${project.artifactId}-${project.version}.${project.packaging}&quot;</p><p><b>password</b></p><p>The password to use when connecting. Default is 'admin'.</p><p><b>path</b></p><p>The path to upload the package to. Default is '${project.artifactId}-${project.version}.jar'</p><p><b>port</b></p><p>The port of the server to connect to. Default is '4502'.</p><p><b>uploadOnly</b></p><p>Flag to determine whether or not to only upload and not install the package. False by default.</p><p><b>useLegacy</b></p><p>Flag to determine whether or not to use the Legacy API. False by default.</p><p><b>user</b></p><p>The username to use when connecting. Default is 'admin'.</p></div></div>
                   </div>
             </div>
       

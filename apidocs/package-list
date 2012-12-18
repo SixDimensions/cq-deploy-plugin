@@ -1,0 +1,8 @@
+com.sixdimensions.wcm.cq
+com.sixdimensions.wcm.cq.dao
+com.sixdimensions.wcm.cq.dao.webdav
+com.sixdimensions.wcm.cq.pack
+com.sixdimensions.wcm.cq.pack.service
+com.sixdimensions.wcm.cq.pack.service.impl
+com.sixdimensions.wcm.cq.service
+com.sixdimensions.wcm.cq.service.impl
