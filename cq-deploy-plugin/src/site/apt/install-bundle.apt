@@ -3,7 +3,7 @@
  ------
  Dan Klco
  ------
- 2012-08-02
+ 2012-12-18
  ------
 
 install-bundle
@@ -24,7 +24,7 @@ install-bundle
 <plugin>
   <groupId>com.sixdimensions.wcm.cq</groupId>
   <artifactId>cq-deploy-plugin</artifactId>
-  <version>0.1.4</version>
+  <version>0.1.6</version>
   <executions>
     <execution>
       <id>install-bundle</id>

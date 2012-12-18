@@ -49,7 +49,7 @@
 		<fluidoSkin>
 			<sideBarEnabled>true</sideBarEnabled>
 			<googleSearch>
-				<sitesearch>cq-deploy-plugin.6dlabs.com</sitesearch>
+				<sitesearch>sixdimensions.github.com/cq-deploy-plugin</sitesearch>
 			</googleSearch>
 		</fluidoSkin>
 	</custom>
