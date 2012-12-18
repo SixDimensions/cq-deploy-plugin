@@ -37,7 +37,8 @@
 		</menu>
 		<menu ref="reports" />
 		<menu name="Examples">
-			<item name="Sample POM" href="examples/pom.xml" />
+			<item name="Example POM" href="examples/pom.xml" />
+			<item name="Example Project" href="examples/${project.artifactId}-${project.version}-example.zip" />
 		</menu>
 	</body>
 	<skin>
