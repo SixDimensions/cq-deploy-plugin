@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.sixdimensions.commons.osgi.wrapper</groupId>
 	<artifactId>rome</artifactId>
 	<packaging>bundle</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 
 	<name>Rome Wrapper</name>
 	<description>This bundle wraps rome-1.0.jar and makes it work in Apache Felix.</description>
@@ -31,7 +30,8 @@
 		<url>git@github.com:SixDimensions/cq-deploy-plugin.git</url>
 		<developerConnection>scm:git:git@github.com:SixDimensions/cq-deploy-plugin.git</developerConnection>
 		<connection>scm:git:git@github.com:SixDimensions/cq-deploy-plugin.git</connection>
-	</scm>
+	  <tag>rome-1.0</tag>
+  </scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,7 +59,7 @@
 							rome;rome-fetcher;inline=true,
 							jdom;inline=true
 						</Embed-Dependency>
-						<Private-Package></Private-Package>
+						<Private-Package />
 					</instructions>
 				</configuration>
 			</plugin>
